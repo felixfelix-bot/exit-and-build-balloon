@@ -128,3 +128,75 @@ two LR2021 modules demonstrated coexisting on one payload (crystal/TCXO and
 antenna coupling verified), the band-switch firmware written and soak-tested, and
 measured front-end blocking/harmonic data for the E80 board. That is not a
 two-week project.
+
+---
+
+## 6. "What if we use 2.4 GHz instead of 915?" — a real trade
+
+**First, the FLRC-260 problem does not go away.** It is not a band problem.
+
+`47 CFR 15.247(a)(2)` requires **≥500 kHz of 6 dB bandwidth** for a DTS in
+**both** 902–928 MHz and 2400–2483.5 MHz. The limits are byte-identical in both
+bands — *the law does not separate them*. FLRC-260's ~300 kHz fails in either
+band, and FLRC-1300's 1200 kHz passes in either band.
+
+> **So the compliance fix is "use FLRC-1300 (or 650)", not "change band".**
+> Band choice is orthogonal to that problem.
+
+### 6.1 The genuine arguments for 2.4 GHz
+
+| # | Argument | Weight |
+|---|---|---|
+| 1 | **Proven on this exact hardware.** A full 2.4 GHz sweep ran 2026-08-22 (session `2608222108`). **915 MHz has never been swept on this bench.** | **Strong** — with ~2 weeks left, this is the biggest single de-risking available |
+| 2 | **Zero firmware band work.** `fips_bridge.cpp` already runs `BRIDGE_FREQ 2450.0f` / `BRIDGE_POWER 12`. 915 means a config change plus re-verification of every knob | **Strong** |
+| 3 | **Tiny antennas.** λ/2 = 3.1 cm at 2.4 GHz vs 16.4 cm at 915 — less tether interaction, less wind loading, easier payload integration | Moderate |
+| 4 | **Wider band.** 83.5 MHz (2400–2483.5) vs 26 MHz (902–928) — more room to move off a dirty channel | Moderate |
+| 5 | **Global ISM.** No regional variant risk; both the `-400` and `-900` eval boards work | Minor |
+
+### 6.2 The genuine arguments against 2.4 GHz
+
+| # | Argument | Weight |
+|---|---|---|
+| 1 | **18.55 dB less budget** — +12 dBm HF PA vs +22 dBm LF (10 dB), plus 8.55 dB extra FSPL | Moderate — see 6.3 |
+| 2 | **Most contested spectrum on site.** 2,000-person outdoor event: every hotspot, AP, camera, phone. Plus the ranch's own mesh | **Strong for a live demo** |
+| 3 | **Documented RX degradation.** The repo measured 2.4 GHz RX degrading after ~5 min of sustained operation under WiFi interference (RX active ~2.5 min at 868 MHz, ~5 min at 2.4 GHz) | **Strong for a 4-day run** |
+
+### 6.3 Why the 18.55 dB deficit is mostly unspendable
+
+From the RF trade study: at 2450 MHz / +12 dBm, **every configuration closes at
+every distance to 1 km with ≥16 dB of spare margin.**
+
+| Config | 403 m leg | 800 m direct |
+|---|---|---|
+| 915 MHz, FLRC-1300 | 45.7 dB | 39.8 dB |
+| 2450 MHz, FLRC-1300 | 26.7 dB | 16.3 dB |
+
+**You do not need 45.7 dB of margin for a 400 m link.** At venue scale (sub-km)
+the 915 advantage is largely a number on a page. *Link closure is not the
+binding constraint* — interference and hardware reliability are.
+
+### 6.4 The option that changes the calculus: a FEM
+
+The repo already carries a **SKY66112-11 front-end module** component
+(`tracker/firmware/components/sky66112`, ADR-005). Fitting it recovers
+**+10 dB** at 2.4 GHz: +12 → +22 dBm conducted, +28 dBm EIRP with a 6 dBi
+antenna. That closes most of the PA gap and makes 2.4 GHz genuinely competitive
+— at the cost of ~1 g, a few dB of insertion loss, and TX/RX switching logic.
+
+### 6.5 Recommendation
+
+**Run 2.4 GHz now as the bench default; target 915 MHz for the event; decide on
+measured evidence, not on preference.**
+
+| Phase | Band | Why |
+|---|---|---|
+| Bench bring-up, E80 verification, bridge firmware work (C1–C6) | **2.4 GHz** | Proven path, zero band work, fastest route to a working relay. De-risks the 2-week deadline. |
+| 915 MHz sweep (checklist V3) | 915 | Cheap to attempt; it is the only thing that can *unlock* the better event band |
+| Event | **915 MHz if the sweep passes, else 2.4 GHz** | 915 wins on uncontested spectrum and no WiFi-induced RX degradation. 2.4 GHz is a *proven* fallback, not a disaster. |
+| Contingency if 915 fails and 2.4 GHz is dirty on site | 2.4 GHz + SKY66112 FEM | Recovers 10 dB |
+
+**The deciding measurement is the venue RF survey.** Both bands are defensible on
+paper; only a site survey distinguishes them. Book it as a Phase 0 gate.
+
+**What is NOT recommended:** cross-band (two radios everywhere, and it does not
+remove the need for TDMA), or 433 MHz (15.231, not a data band).

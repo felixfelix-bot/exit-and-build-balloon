@@ -20,25 +20,38 @@ Read the silkscreen on each board and record the exact SKU.
 - [ ] Board #2 SKU: `E80-______-02`
 
 **What the SKUs mean** (from `docs/e80-900mbl-02-eval/E80-900MBL-02_CAPABILITY_REPORT.md`
-in `balloon-fresh`):
+and `docs/2G4-LINK-BUDGET-ANALYSIS.md` in `balloon-fresh`):
 
 | SKU | Module on board | LF band | 2.4 GHz? |
 |---|---|---|---|
-| `E80-400MBL-02` | `E80-400M2212S` (LR2021) | ~400–550 MHz (different PA tuning) | **no** |
-| `E80-900MBL-02` | `E80-900M2212S` (LR2021) | ~850–960 MHz | **no** |
+| `E80-400MBL-02` | `E80-400M2212S` (LR2021) | ~400–550 MHz (different PA tuning) | **yes** (LR2021 HF path) |
+| `E80-900MBL-02` | `E80-900M2212S` (LR2021) | ~850–960 MHz | **yes** (LR2021 HF path) |
 
-> ⚠️ **The LR2021 chip is dual-band; the E80 evaluation board is NOT.** The
-> capability report contradicts itself on this — line 28 lists the SKUs as
-> single-band, while line 196 claims "true dual-band operation … both antenna
-> jacks are populated". Line 196 reads like datasheet-family boilerplate. A
-> 900 MHz board's LF PA tuning does not cover 2450 MHz.
+> ✅ **CORRECTED 2026-10-22 (operator correction).** An earlier version of this
+> checklist claimed the E80 eval board was single-band per SKU. **That was
+> wrong.** The board has **dual SMA jacks** (one sub-GHz, one 2.4 GHz) and the
+> LR2021's HF path is wired out. Evidence in our own repo:
+> - `2G4-LINK-BUDGET-ANALYSIS.md`: *"The E80-900MBL-02 board CAN and SHOULD test
+>   at 2.4 GHz alongside 868 MHz… The board has dual SMA jacks (one sub-GHz, one
+>   2.4 GHz), the LR2021 chip has a dedicated HF PA path (+12 dBm max at 2.4 GHz
+>   vs +22 dBm at sub-GHz), and the bench firmware already auto-switches PA/RX
+>   path when frequency ≥ 1.6 GHz (`radio_bench.c:321-343`)."*
+> - **A full 2.4 GHz sweep was already run successfully on 2026-08-22** (session
+>   `2608222108`) — the hardware path is *proven*, not assumed.
 >
-> **This is the single most load-bearing unknown in the project.** If the boards
-> cannot do 2.4 GHz, the 2.4 GHz leg of any cross-band design is dead, and the
-> E80s are bench-only instruments while the balloon payload uses LR2021 modules.
+> The capability report's own line 28 ("supported module SKUs… 400 MHz band /
+> 900 MHz band") describes the **module SKUs**, not the board's RF capability.
+> The 400 vs 900 distinction is which LF sub-range the module is *tuned* for; the
+> HF 2.4 GHz path is present on the LR2021 either way.
+>
+> **Practical consequence: the E80 eval board can serve both bands of the
+> design.** The `-400` vs `-900` distinction still matters for the *sub-GHz* leg
+> (a `-400` board will not do 915 well), but not for 2.4 GHz.
 
-- [ ] V0.1 Confirm whether the board exposes a **2.4 GHz antenna jack** (two SMA
-      jacks = sub-GHz + 2.4 GHz; one jack = single-band board).
+- [x] V0.1 **2.4 GHz antenna jack present** — dual SMA confirmed, HF path proven
+      by the 2026-08-22 sweep.
+- [ ] V0.2 Record which LF sub-range each board's module is tuned for
+      (`-400` vs `-900`) — this decides whether that board can do 915 MHz.
 
 ---
 
