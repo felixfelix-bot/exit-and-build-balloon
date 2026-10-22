@@ -32,8 +32,9 @@ protocol work on the balloon. The balloon is a dumb pipe.
 | D5 | **Scheduling is ground-derived from absolute UTC; the balloon only follows** — *deferred: not needed at 2 nodes* | A fixed UTC-derived slot table is a *constant*, not a decision — so the relay stays ADR-014 transparent while collisions are prevented. 50 ms frame / 8 slots / balloon relays slot 6. **With a single ground pair there is no N² collision problem, so this drops to OPTIONAL** (see §3.1). |
 | D6 | **Scope: a 2-node bent pipe** (operator decision, 2026-10-22) | The balloon is a bent pipe between exactly two ground nodes for now. This removes the transport-topology blocker (FIPS serial is point-to-point: one bridge = one peer) and removes the TDMA requirement. N=5 is documented in `reports/ARCH-5NODE-BENT-PIPE-2026-11.md` as a future option, not this event's deliverable. |
 | **D7** | **FLY THE RELAY ONLY WHERE THE GROUND PATH IS OBSTRUCTED. This is the entire justification for the balloon.** | See §2.1 — this is the load-bearing decision, not a caveat. |
-| D8 | **Mylar/foil balloons, not latex** | Latex loses helium in ~12–24 h; a 4-day event means daily re-inflation. Foil holds for weeks. |
-| D9 | **≤150 ft (45.7 m) AGL by default; 300 ft if paperwork allows** | 150 ft is the easy 14 CFR 101 Subpart B envelope. **300 ft costs only 0.16 dB of FSPL but more than doubles near-end clearance** (x_min 11.9 m vs 30.4 m) — pursue it for *geometry*, not power. |
+| D8 | **Mylar/foil balloons, not latex** — *superseded by D8a* | Latex loses helium in ~12–24 h; a 4-day event means daily re-inflation. Foil holds for weeks. |
+| **D8a** | **ASSET: Helikite primary + mast control; latex sphere as cheap fallback** (operator, 2026-10-22) | A foil cluster is a **low-wind-only, wrong-shaped asset**: `tan θ = drag ÷ free lift` puts a 4×36 in foil cluster at **85° / 12 ft effective height at 8 kn**, and the venue's Nov daylight wind is **≥8 kn half the time**. Adding balloons does not help (drag scales with count). A Helikite generates lift *into* the wind. The **mast is the control** that makes the balloon's contribution measurable. See `shopping-list.md` §0. |
+| D9 | **≤150 ft (45.7 m) AGL; 300 ft is OFF the table** | ~~300 ft costs only 0.16 dB and doubles near-end clearance~~ — but **14 CFR Part 77 § 77.9(a) requires notice >200 ft AGL**, Form 7460-1 wants 45 days, and the FAA OE/AAA portal is **closed by the government shutdown**. Cap at 150–200 ft. Near-end clearance becomes an anchoring/siting problem instead. |
 | D10 | **Do NOT fabricate the v10 hub PCB** | JLCPCB 2-layer + assembly is ~2 weeks — lands on the event with zero margin. Existing inventory (20× ESP32-C3 Mini V1, 4× NiceRF LR2021, 3× E28-2G4M27S) builds a working rig today. |
 | D11 | **Buy nothing ourselves; source and link only** | Operator instruction. Deliverable is a shopping list with verified US links. |
 
@@ -213,6 +214,18 @@ a go/no-go wind rule.
 | B4 | **FIPS serial transport revision** — pin & vendor the v0.3.0-dev-era tree | engineering | Ground chain |
 | B5 | ~~N=5 transport topology~~ **RESOLVED 2026-10-22 (operator): scope is a 2-node bent pipe.** The point-to-point serial limit is irrelevant at N=2. The 5-node analysis remains in `reports/ARCH-5NODE-BENT-PIPE-2026-11.md` as future work. | — | closed |
 | B6 | Venue RF survey (2.4 GHz occupancy, 915 noise floor) | engineering | D2 confirmation |
+
+---
+
+## 5.1 Newly-surfaced blockers (consultant reports, 2026-10-22)
+
+| # | Blocker | Impact |
+|---|---|---|
+| B7 | **The asset choice was wind-infeasible.** A foil cluster sits at 85 deg / 12 ft effective height at 8 kn, and Nov daylight is >=8 kn half the time. | **Resolved by D8a** (Helikite + mast). Order the Helikite first — UK transit + customs is the longest lead time in the list. |
+| B8 | **300 ft is off the table.** 14 CFR Part 77 s77.9(a) requires notice >200 ft AGL; Form 7460-1 wants 45 days; the FAA OE/AAA portal is **closed by the government shutdown** and is refusing new notices. | **Resolved by D9** — cap at 150-200 ft, accept the reduced near-end clearance, solve it by anchoring/siting. |
+| B9 | **`serial_udp_bridge.py` at 115200 baud caps the system at 11.5 kB/s = 122 ms per 1404 B datagram — 4x worse than the radio chain.** | **Open.** Must be >=921600 baud. Cheap fix, but it is a prerequisite, not a tuning step. |
+| B10 | **Drone + invisible Dyneema line.** The largest on-site safety exposure and **no regulation covers it**. | **Open.** Drone pilot brief, 100 ft no-fly cylinder, whole-line marking. |
+| B11 | **Helium grade trap.** Consumer tanks are >=80% He (Balloon Time's own sell sheet) = **20% lift penalty**; site lift is **28 g/ft3, not 1.02 kg/m3**. | **Resolved in `shopping-list.md`** — buy balloon-grade >=99.99%. |
 
 ---
 
