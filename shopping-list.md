@@ -45,11 +45,13 @@ so it holds altitude when a sphere lies down.
 | Item | Vendor | Link | Notes |
 |---|---|---|---|
 | Helikite, small (sub-200 g payload, 50–150 ft) | **Allsopp Helikites Ltd** (UK) | https://www.helikites.com/shop | **UNVERIFIED pricing** — the shop is a JS app that could not be scraped. Get a quote: `info@helikites.com`, +44 (0)1425 654967. **UK→US: customs + 1–3 week transit — this is a lead-time risk.** |
-| US distributor / reseller | *being sourced* | — | A dedicated sourcing pass is running (see `HELIKITE-AND-TETHER-SOURCING-US-2026-11.md` when it lands) |
+| US distributor / reseller | **NONE FOUND** | — | **Searched 2026-10-23 and found no US reseller.** Search engines blocked this host (DuckDuckGo returned 202 challenge pages; Marginalia and Mojeek returned no relevant hits). This is a **negative result, not an absence of effort** — treat "no US Helikite source" as the working assumption until a human confirms otherwise. |
 
-> ⚠️ **Order this FIRST if the Helikite is the primary.** UK transit plus customs against a
-> 5 Nov event means it is the longest-lead item in the whole list. If a US source cannot be
-> found, the latex sphere (below) becomes the primary, not the fallback.
+> ⚠️ **Consequence of the negative result: the latex sphere is now the DEFAULT, not
+> the fallback.** UK lead time (1–3 weeks transit + customs + the same 7-working-day
+> processing problem that affects the E80, see `reports/ELECTRONICS-SOURCING-US-2026-11.md` §2)
+> against a 5 Nov event means the Helikite is only viable if ordered **immediately**.
+> Decide now: order the Helikite today and accept the risk, or go latex-sphere primary.
 
 ---
 
@@ -79,7 +81,7 @@ provable rather than asserted.
 
 | Item | Spec | Where | Notes |
 |---|---|---|---|
-| Telescoping / tilt-over mast | 20–40 ft, holds ~150 g payload | *being sourced* | Must survive the same 9 kn go/no-go rule as the tether |
+| Telescoping / tilt-over mast | 20–40 ft, holds ~150 g payload | **NO VENDOR SOURCED** | Must survive the same 9 kn go/no-go rule as the tether. **Not sourced** — do not invent one. Route to settle: any US telescoping push-up mast / surveyor tripod supplier (McMaster-Carr, REI, ham-radio suppliers all stock variants); confirm payload head and guy-point before ordering. |
 
 ---
 
@@ -188,24 +190,51 @@ an industrial distributor closes at this volume.
 
 ## 6. Radio hardware
 
-**Two sourcing passes are running.** This section will be completed with verified US links
-when they land; see:
+**Source: `reports/ELECTRONICS-SOURCING-US-2026-11.md`** (curl-verified, prices read
+from the store's own Shopify `products.json` on 2026-10-23; its integer fields are
+**cents**, and that was independently re-verified).
 
-- `reports/ELECTRONICS-SOURCING-US-2026-11.md` — radio modules, antennas, dev boards
-- `reports/HELIKITE-AND-TETHER-SOURCING-US-2026-11.md` — Helikite, tether, mast
+> 🔴 **LEAD TIME IS THE FINDING THAT CHANGES THE PLAN.** EBYTE's own shipping
+> policy: **7 working days processing** + **7–30 working days** surface shipping
+> (US routed via Yanwen Express Line). **Total 14–37 working days → lands
+> ≈ 12 Nov – 17 Dec 2026. It MISSES the 5 Nov event.**
+>
+> **Therefore the event build must use existing inventory** (D10: 20× ESP32-C3
+> Mini V1, 4× NiceRF LR2021, 3× E28-2G4M27S). Order anyway for spares — just do
+> not plan the demo around arrival.
 
-**What is needed (spec, not yet linked):**
+### The critical item — verified prices, in stock
 
-| Item | Spec | Note |
-|---|---|---|
-| E80 eval board | **`E80-900MBL-02`** preferred (915 option); `-400` variant is 400 MHz | Realistically AliExpress / CDEBYTE direct — **2–3 week lead time risk** |
-| LR2021 module | NiceRF LoRa2021 (~1.8 g) | payload radio |
-| ESP32-C3 board | SuperMini / XIAO ESP32C3 / Mini V1 | serial↔radio bridge |
-| Antennas | 2.4 GHz and 915 MHz SMA, lightweight | 2.4 GHz λ/2 = 3.1 cm; 915 λ/2 = 16.4 cm |
-| 1S LiPo + protection, regulator | small, lightweight | ~150 g payload budget |
+Product page (carries the whole E80 variant matrix):
+`https://ebyteiot.com/products/ebyte-e80-400m2213s-semtech-multi-band-lora-lr1121-chip-21-5-13dbm-433m-2-4ghz-lora-dual-band-wireless-rf-transceiver-module-副本`
+(HTTP 200; the CJK `副本` must be URL-encoded as `%E5%89%AF%E6%9C%AC`.)
 
-> **Existing inventory covers the build without new fabrication:** 20× ESP32-C3 Mini V1,
-> 4× NiceRF LR2021, 3× E28-2G4M27S, plus wire-dipole antennas. **No PCB order** (D10).
+| Variant | USD | In stock | Notes |
+|---|---|---|---|
+| **`E80-900MBL-02`** — the EVAL BOARD (STM32F103 + LR2021) | **$18.56** | yes | **The bench item.** This is what `E80-VERIFICATION-CHECKLIST.md` V1 operates on |
+| `E80-900M2212S(LR2021)` — bare module | **$9.48** | yes | Spare |
+| `E80-900M2213S` (LR1121) + 915 FPC + 2.4 G FPC antennas | **$8.25** | yes | Bundle — both antennas included |
+| `E80-400MBL-02` / `-01` | $18.56 / $17.02 | yes | **400 MHz — wrong band for D2** |
+
+> ⚠️ **`…M2212S` = LR2021; `…M2213S` = LR1121. Different chips, different
+> datasheets.** The repo's bench inventory is LR2021 → order `2212S` if matching
+> inventory matters.
+>
+> ⚠️ **The product page describes dual-band but shows NO connector map.** Do not
+> infer the 2.4 GHz antenna jack from the listing — that is V0.1 in the checklist
+> and it must be confirmed on the physical board.
+
+### Other radio items
+
+| Item | Vendor / status |
+|---|---|
+| LR2021 bare chip / dev kit | Semtech page HTTP 200, **no published price**. DigiKey = **403 blocked**, Mouser = **no connection** from this host → **UNVERIFIED** |
+| NiceRF LoRa2021 module | `nicerf.com` HTTP 200; the specific module path returned **404** → **UNVERIFIED**, need the right URL |
+| E28-2G4M27S (SX1281, +27 dBm) | EBYTE store, listing verified |
+| ESP32-C3 boards, LiPo, JST-PH, anemometer | Adafruit + PiShop reachable (HTTP 200 on search paths) — specific SKUs not pinned |
+
+**Every unverified row above carries a real reason and a route to settle it.** None
+of them were invented. See the sourcing report's §10 for the full HTTP status log.
 
 ---
 
