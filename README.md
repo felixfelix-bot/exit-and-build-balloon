@@ -34,6 +34,8 @@ first; it carries the decision record and the open blockers.
 |---|---|
 | `docs/PLAN-bent-pipe-2026-11.md` | **Master plan** — decisions, phases, worker-sized tasks, open blockers |
 | `docs/HARMONICS-AND-BAND-PLAN.md` | Band choice: why not 433, harmonic/intermod analysis, why symmetric 915 |
+| `docs/ASSET-STRATEGY.md` | **Lifting-asset decision** — mast primary (permission-free), sphere second, Helikite only on a fast US quote |
+| `docs/OUTBOUND-DRAFTS.md` | **DRAFTS, NOT SENT** — Helikite quote request + organiser airspace message, staged for approval |
 | `docs/E80-VERIFICATION-CHECKLIST.md` | Board bring-up checklist — run this FIRST, it gates everything |
 | `docs/SITE-RULES-AND-FAA.md` | Bandera site facts + 14 CFR 101 Subpart B moored-balloon rules |
 | `shopping-list.md` | US-sourced parts with vendor links (radio, balloons, helium, tether) |
