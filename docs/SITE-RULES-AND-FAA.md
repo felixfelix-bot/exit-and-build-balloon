@@ -155,6 +155,7 @@ the tether-hazard plan.
 |---|---|---|---|---|
 | ≤6 ft balloon, ≤150 ft AGL, daylight | **No** | **No** (outside Subpart B) | no | no |
 | ≤6 ft balloon, >150 ft AGL | No | No | **no** — § 101.15 only binds in-scope balloons | no |
+| ≤6 ft balloon, ≤150 ft AGL, **overnight (4-day)** | **No** | **No** | no | no — **but the rig is unattended at night; § 101.7 still applies** |
 | >6 ft / >115 ft³, ≤150 ft AGL | **Yes** | **YES — 3.43 mi from 20TS fails it** | no | **yes** |
 | >6 ft / >115 ft³, >150 ft AGL | Yes | YES | **yes, ≥24 h** | yes |
 
@@ -218,3 +219,46 @@ curl --compressed \
 
 **Re-verify before the event.** Regulations and airfield status change; the
 eleven-day gap between this retrieval and the event is small but not zero.
+
+---
+
+## 8. Addendum (2026-10-23) — 4-day hang-time: overnight and lighting
+
+**Hang-time is CONFIRMED at 4 days** (operator, 2026-10-22). One consequence is
+regulatory, and it is not free: **daylight-only is no longer a free choice.**
+A rig that runs 5–8 November sits up overnight unless it is struck each evening.
+
+| § 101.17 duty | When it applies | What it requires |
+|---|---|---|
+| **(b) marking** | sunrise → sunset | colored pennants/streamers at **≤50 ft intervals, beginning at 150 ft** above the surface, visible ≥1 mile |
+| **(a) lighting** | sunset → sunrise | the balloon **and its mooring lines** lighted to give a visual warning equal to an obstruction to air navigation |
+
+**The exemption is what keeps this cheap — and it is size-based, not
+altitude-based.** § 101.1(a)(1) puts only balloons **>6 ft diameter or
+>115 ft³** inside Subpart B. A ≤60 in sphere (65 ft³) or any Helikite in the
+planned size class stays **outside Subpart B entirely**, so neither the
+§ 101.17(b) pennants nor the § 101.17(a) lighting duty attaches. **Flying lower
+buys nothing; flying smaller buys everything.** If the envelope ever crosses
+6 ft / 115 ft³, all of § 101.13–101.19 return at once — including the five-mile
+airport rule and the § 101.19 rapid-deflation device.
+
+**Two design consequences for the 4-day run:**
+
+1. **A night-capable rig must be designed for it or struck each evening.** If the
+   envelope is in scope, lighting the envelope *and the line* for four nights is
+   a real power draw and a new failure mode — it collides directly with the
+   solar-vs-conductive-tether decision in `shopping-list.md` (section **Power**).
+2. **Unattended overnight means the go/no-go rule does not end at dusk.** The rig
+   must either be walked down or left in a state that survives the night wind;
+   that dusk decision is specified in `docs/RUNBOOK-event-operations.md`.
+
+**Recorded position: keep the envelope ≤6 ft and stay outside Subpart B, and
+strike or secure the rig at dusk rather than light it.** That keeps the pennant
+and lighting machinery, and the power it needs, out of the design. If the
+organiser wants a lit overnight rig, that is a scope change with a power budget
+attached — decide before ordering.
+
+**What does not go away overnight:** § 101.7 (no hazard to persons or property)
+still applies to an out-of-scope balloon, and an unattended line at 02:00 is
+exactly the sort of thing it governs. Landowner permission does not expire at
+sunset either.

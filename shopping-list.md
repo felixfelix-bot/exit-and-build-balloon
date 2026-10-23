@@ -129,11 +129,39 @@ SF ≥ 5 → **≥1 kN MBL**; 1.5 mm Dyneema gives SF ≈ 10.
 
 ### Volume math (pure He @ 28 °C = 27.2 g/ft³)
 
+**Hang-time is CONFIRMED at 4 days** (operator, 2026-10-22). The requirement is the
+4-day row; the one-hour row is kept only as a comparison, not as a planning basis.
+
 | Scenario | Net lift needed | Pure He | 80/20 party mix |
 |---|---|---|---|
-| 4 × 36 in, one demo hour | 330 g | **12.1 ft³** | 15.1 ft³ |
-| 6 × 36 in | 470 g | **17.3 ft³** | 21.6 ft³ |
-| **4-day, 6 × 36 in, 20%/day top-up** | — | **~30 ft³** | ~37 ft³ |
+| *comparison only:* 4 × 36 in, one demo hour | 330 g | 12.1 ft³ | 15.1 ft³ |
+| *comparison only:* 6 × 36 in, one demo hour | 470 g | 17.3 ft³ | 21.6 ft³ |
+| **REQUIREMENT — 4-day tether, 20%/day top-up** | — | **~30 ft³** | **~37 ft³** |
+
+> **Buy ~30 ft³ of balloon-grade ≥99.99% helium.** That is the number the 4-day
+> hang-time costs. If forced onto an 80/20 party mix the same duty cycle needs
+> **~37 ft³**, and you also pay the 20% lift penalty twice (volume *and* top-up).
+
+### 4-day top-up ritual (this is an operating procedure, not a footnote)
+
+Helium leaks out of every soft envelope; over 96 h the loss is what sets the
+volume, not the initial fill. Plan for a **20 %/day top-up**:
+
+1. **Morning lift-weigh, every morning.** Calibrated 0–500 g scale, same time of
+   day (temperature swings site lift by ~4 % between a 10 °C dawn and a 28 °C
+   afternoon). Record grams. This is *your* leak number, not the vendor's.
+2. **Top up to the recorded morning lift target** before the first demo slot.
+3. **Log the top-up volume.** The 4-day total is what the cylinder must hold;
+   if consumption drifts above ~7.5 ft³/day something is wrong (seam leak, or a
+   valve not fully closed).
+4. **Weigh again in the early afternoon** (13:00 check, `docs/RUNBOOK-event-operations.md`).
+   A second daily weigh is what converts "roughly 30 ft³" into a measured number.
+
+> **Consumer party tanks cannot supply this economically.** Balloon Time at
+> **$5.10/ft³** (8.9 ft³ = $56.99) versus a USGS Grade-A base of **~$0.33/ft³**
+> (~$330/Mcf) — a **~15× retail premium**. Thirty-plus ft³ over four days plus a
+> reserve is an industrial-cylinder purchase, not a stack of party tanks. Buy
+> balloon-grade from an industrial distributor (§5 supply table above).
 
 > ⚠️ **Site lift is 28 g/ft³, not the sea-level 1.02 kg/m³.** 471.6 m elevation costs ~2%; a
 > 28 °C afternoon another 4%.
@@ -213,7 +241,7 @@ sustained wind at KERV never reached 20 kn (max 18 kn); 14% of days had a daily 
 
 | # | Item | Owner |
 |---|---|---|
-| 1 | **Hang-time decision** — 4-day tether vs one scheduled hour. Drives helium volume (12 vs 30 ft³) and tether spec. | organiser |
+| 1 | ~~**Hang-time decision**~~ **CLOSED 2026-10-22 — 4 days.** Helium volume is now **~30 ft³ balloon-grade** (§5); tether spec and the 4-day timeline follow from it. | — closed |
 | 2 | **Helikite US availability** — sourcing pass running; if none, latex sphere becomes primary | engineering |
 | 3 | **Form 7460-1** — the FAA OE/AAA portal was **closed by the government shutdown** as of 2026-10-22 and is refusing new Part 77 notices. **Cap at 150–200 ft AGL and do not depend on a determination arriving.** | organiser |
 | 4 | **§ 101.13(a)(4) five-mile airport question** — 20TS Bains Private is 3.4 mi away. Only binds if the balloon exceeds 6 ft / 115 ft³. | organiser / FAA |

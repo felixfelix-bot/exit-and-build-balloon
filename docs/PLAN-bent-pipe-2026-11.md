@@ -141,7 +141,7 @@ The balloon carries the **same modem pair, cut-through** — no FIPS in the air.
 | G3 | **915 MHz sweep runs** — never been run on this bench | D2 |
 | G4 | **FIPS revision with serial transport pinned & vendored** | The entire ground chain |
 | G5 | Watchdog soak ≥4 h — mean time between failures | 4-day operation |
-| G6 | Organiser answers: hang-time (4 days vs 1 hour), helium supply | Logistics, BOM |
+| G6 | Organiser answers: ~~hang-time (4 days vs 1 hour)~~ **answered — 4 days**; **helium supply still open** (balloon-grade ≥99.99%, ~30 ft³, industrial cylinder — `shopping-list.md` §5) | Logistics, BOM |
 
 See `docs/E80-VERIFICATION-CHECKLIST.md` for the executable form of G1–G5.
 
@@ -199,8 +199,8 @@ block map of the venue. Fly at 150 ft, then 300 ft if paperwork allows.
 
 ### Phase 4 — Event operation
 
-4-day (or scheduled-hour) run with the soak-tested watchdog, stats telemetry, and
-a go/no-go wind rule.
+**4-day** run with the soak-tested watchdog, stats telemetry, and a go/no-go wind
+rule. Operating procedure: `docs/RUNBOOK-event-operations.md`.
 
 ---
 
@@ -209,7 +209,7 @@ a go/no-go wind rule.
 | # | Blocker | Owner | Impact |
 |---|---|---|---|
 | B1 | ~~Which E80 SKUs?~~ **RESOLVED 2026-10-22:** dual-band confirmed (2.4 GHz HF path proven by the 2026-08-22 sweep). Remaining: record `-400` vs `-900` per board (V0.2) — only affects the 915 *option*. | operator | 915 option only |
-| B2 | **Hang-time decision** — 4 days vs one scheduled hour | organiser | Helium volume, tether spec, entire logistics timeline |
+| B2 | ~~**Hang-time decision** — 4 days vs one scheduled hour~~ **CLOSED 2026-10-23 (operator): hang-time is CONFIRMED at 4 days.** Helium volume is ~30 ft³ balloon-grade ≥99.99% with a 20%/day top-up (`shopping-list.md` §5); the tether spec and the entire logistics timeline follow from it. Overnight operation now applies — see `docs/SITE-RULES-AND-FAA.md` §8. | — | **closed** |
 | B3 | **Helium supply** — is balloon-grade He available and legal to bring on site? | organiser | Demo viability |
 | B4 | **FIPS serial transport revision** — pin & vendor the v0.3.0-dev-era tree | engineering | Ground chain |
 | B5 | ~~N=5 transport topology~~ **RESOLVED 2026-10-22 (operator): scope is a 2-node bent pipe.** The point-to-point serial limit is irrelevant at N=2. The 5-node analysis remains in `reports/ARCH-5NODE-BENT-PIPE-2026-11.md` as future work. | — | closed |
