@@ -209,6 +209,91 @@ when they land; see:
 
 ---
 
+## 6.1 Power — conductive tether vs solar
+
+**Decision: power the payload from the ground, up the tether.** The 4-day
+hang-time settles this; solar stops being attractive the moment the rig has to
+run 96 h with an overnight.
+
+### Why not solar
+
+| | Value |
+|---|---|
+| Total energy needed over 96 h | **~14.4 Wh** at **~0.15 W** average |
+| Load | ESP32-C3 + LR2021, mostly-RX, **30–60 mA at 3.3 V** |
+| Storage sizing | 14.4 Wh ÷ 3.3 V ≈ **4.4 Ah** of usable energy, plus overnight margin and conversion losses — this is not a supercap |
+| Existing repo design mass | 12× 52×19 mm cells + BAT54 + 1.0 F 5.5 V supercap + TPS7A02 ≈ **25–35 g** |
+
+The 25–35 g solar design is **intermittent** and introduces a **new failure mode
+overnight**, precisely when nobody is watching and when a 4-day run cannot
+tolerate a dead payload. A 1.0 F supercap holds ~4 J at 5 V — orders of
+magnitude short of 14.4 Wh. Solar is the wrong architecture for this duty cycle,
+and the mass it saves is smaller than the tether option's worst case (§ below).
+
+### Why the conductive tether works
+
+**2-conductor run at 150 ft = 45.7 m.**
+
+| Cable | Mass (pair, 45.7 m) | Resistance per leg | Drop @ 50 mA (loop) | Drop @ 20 mA (loop) |
+|---|---|---|---|---|
+| **AWG28** | **66 g** | **9.7 Ω** | **0.97 V** | **0.39 V** |
+| **AWG30** | **42 g** | **15.5 Ω** | **1.55 V** | **0.62 V** |
+
+**DC drop is manageable at the real duty cycle — but only if you do not try to
+pass 3.3 V over 45 m.** At 20 mA an AWG28 pair loses 0.39 V; at 50 mA it loses
+0.97 V, which is 29 % of a 3.3 V rail. Regulating at the payload instead of at
+the ground removes that as a design constraint.
+
+**RECOMMENDED — feed a higher voltage up, regulate at the payload:** raise the
+feed to e.g. **12 V** and step down at the top with a small buck/linear. At 12 V
+the same 66 g AWG28 pair carries 0.15 W at ~12.5 mA for a loop drop of ~0.24 V
+(2 %) — the drop becomes irrelevant rather than merely tolerable.
+
+**⚠️ Confirm the payload regulator's input range before ordering.** This is the
+one number that decides whether the 12 V feed is safe: the on-payload regulator
+must accept the *no-load* feed voltage (a 12 V supply feeding a 12 mA load sits
+near its open-circuit value) and its dropout must be small at 12 mA. Marked
+**UNVERIFIED** until the chosen part's datasheet is read.
+
+**Mass check:** 66 g (AWG28, 150 ft pair) + a small on-payload regulator (~2–5 g)
+against a **~230 g lift budget** (`§4`) — but note that a 2-conductor copper pair
+is **additional** to a Dyneema load line, not a replacement: Dyneema carries the
+load, copper carries the power. Budget both.
+
+### OPEN ITEM — copper pair alongside the Dyneema line
+
+**Nobody has checked this, and it should be checked before it is flown.**
+
+A copper pair running alongside a Dyneema load line adds:
+
+- **mass** (above) and **wind area** (a second line, however thin, is drag);
+- **a conductor near the antenna** — and the whole point of the relay is the
+  antenna's view of the ground node.
+
+**Proposed check:** keep the pair **away from the antenna feed** (run it down
+the opposite side of the tether bundle, and do not dress it against the antenna
+mast); then **measure desensitisation** — compare PER/RSSI/SNR with and without
+the power pair energised, at the same positions, using the A/B procedure in
+`docs/RUNBOOK-event-operations.md`. If the delta is not measurable, close the
+item. Do not design around an unmeasured effect silently.
+
+### Parts to add
+
+| Item | Spec | Where |
+|---|---|---|
+| 2-conductor lightweight cable, 150 ft | AWG28 (66 g/pair) preferred; AWG30 (42 g/pair) if mass-critical | US wire supplier — **link UNVERIFIED, see `reports/ELECTRONICS-SOURCING-US-2026-11.md`** |
+| Connectors | 2-pin locking, keyed (payload side must not unplug in wind) | US distributor — **UNVERIFIED** |
+| On-payload regulator | buck or linear, input must accept the 12 V feed, output 3.3 V @ ≥60 mA | US distributor — **UNVERIFIED** |
+| Ground-side supply | 12 V bench/battery supply at the anchor, with current logging | already on site |
+
+> **Interaction with the lighting question:** if the organiser ever wants a
+> night-lit rig, the lighting load lands on this same power budget
+> (`docs/SITE-RULES-AND-FAA.md` §8). The recorded position is to stay outside
+> Subpart B and strike at dusk rather than light the rig — which keeps the power
+> budget where it is. Re-decide here if that changes.
+
+---
+
 ## 7. Site and safety
 
 | Item | Why |
