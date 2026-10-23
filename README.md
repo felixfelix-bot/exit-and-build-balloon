@@ -23,6 +23,86 @@ laptop A ── fips ── PTY ── serial_udp_bridge.py ── USB CDC ─�
 laptop B ── fips ── PTY ── serial_udp_bridge.py ── USB CDC ── ESP32-C3 ── LR2021 ──┘
 ```
 
+## Shopping overview — pick a path
+
+The **radio payload is the same in all three paths**. Only the thing that lifts it
+(or does not) changes. Prices are indicative; **UNVERIFIED** means no live price
+was read.
+
+### Path comparison
+
+| | **MAST** (recommended) | **BALLOON** (latex sphere) | **HELIKITE** |
+|---|---|---|---|
+| **Airspace permission** | **none required** | landowner permission | landowner permission |
+| **Wind tolerance** | **structural, ~25 kn** | ~5.7 kn at 45° blow-over | **holds into wind** |
+| **Effective height** | exact, as built | blows down: **12 ft at 8 kn** | holds |
+| **Lead time** | **US domestic, days** | **US retail, days** | **UK, 1–3 wk + customs → likely MISSES 5 Nov** |
+| **Indicative cost** | **~$30–120** | **~$250–450** | **UNVERIFIED** (no price published) |
+| **Helium needed** | none | **~30 ft³** balloon-grade | yes, similar |
+| **Fails if** | pole unavailable | wind >6 kn | ships late |
+| **Regulatory surface** | **none below 200 ft** | 101 Subpart B *if* >6 ft / >115 ft³ | same |
+
+> **Only the mast removes the permission question entirely** — 14 CFR Part 101
+> governs *balloons*, not structures. See `docs/ASSET-STRATEGY.md`.
+
+### Common to all paths — the radio
+
+| Item | Price | Source | Ships to Texas |
+|---|---|---|---|
+| **`E80-900MBL-02`** eval board (STM32F103 + LR2021) | **$18.56** | EBYTE, China | ⚠️ **14–37 working days → arrives 12 Nov–17 Dec, MISSES the event** |
+| `E80-900M2212S(LR2021)` bare module | **$9.48** | EBYTE | same |
+| `E80-900M2213S` + 915 & 2.4 G antennas bundle | **$8.25** | EBYTE | same |
+| ESP32-C3 boards, LR2021 modules, E28-2G4M27S | **$0** — already owned | inventory | n/a (in Germany) |
+
+> 🔴 **The one hard constraint:** EBYTE ships from China with 7 working days
+> processing + 7–30 working days transit. **The boards must come from the existing
+> German inventory, or be ordered express and accepted at ~10–14 days.**
+
+### Path A — MAST (headline ~$30–120)
+
+| Item | Qty | Indicative | Where | Lead time |
+|---|---|---|---|---|
+| Fibreglass telescoping pole, 27–31 ft | 1–2 | **~$30 ea** ⚠️ *third-party "~$1/ft" quote, not a vendor price* | **Jackite Inc (US)** https://www.jackite.com/antenna | US domestic, days |
+| Guy line 3 mm Dyneema | 100 ft | ~$25 | arborist / marine | days |
+| Anchors (ground screws / sandbags / hitch shackle) | 1 set | ~$60 | Amazon US | days |
+| **Anemometer** | 1 | ~$30 | Amazon US | days |
+| Helium | — | **$0** | — | — |
+
+Full spec, rigging pattern and the verified vendor survey: **`docs/MAST-SPEC.md`**.
+⚠️ Jackite model/price not yet confirmed — see open items M1–M5.
+
+### Path B — BALLOON, latex sphere (headline ~$250–450)
+
+| Item | Qty | Indicative | Where | Lead time |
+|---|---|---|---|---|
+| 36–48 in round **latex** balloon | 4–6 | ~$10–30 | US party retail | days |
+| **HI-FLOAT** barrier coat | 1 kit | ~$10–20 | same | days |
+| 18 in foil spares | 4 | ~$5–10 | same | days |
+| **Helium, balloon-grade ≥99.99%**, ~30 ft³ | 1 cylinder | **$100–250** incl. deposit/hazmat | Airgas SA **(210) 337-7255**; nexAir; Linde; Matheson | days, will-call |
+| *(alt: Balloon Time 14.9 ft³)* | — | *$75.99 = $5.10/ft³, ~15× base price — one-hour demo only* | Tractor Supply Bandera | days |
+| Tether 1.5 mm Dyneema 200 ft + 1.0 mm 300 ft | 2 | ~$45–65 | arborist / marine | days |
+| Swivels, carabiners, streamers | 1 set | ~$20 | marine | days |
+| Anchors + anemometer | 1 set | ~$90 | Amazon US | days |
+
+⚠️ Consumer party tanks are **≥80% helium only** (a 20% lift penalty) — buy
+industrial balloon-grade. Site lift is **28 g/ft³** at 471 m, not sea-level.
+
+### Path C — HELIKITE (cost UNVERIFIED)
+
+| Item | Qty | Indicative | Where | Lead time |
+|---|---|---|---|---|
+| Helikite, sub-200 g payload, 150 ft | 1 | **UNVERIFIED** | **Allsopp Helikites (UK)** https://www.helikites.com/shop — `info@helikites.com`, +44 1425 654967 | ⚠️ **1–3 weeks + customs** |
+| US reseller | — | — | **NONE FOUND** (searched 2026-10-23) | — |
+| Tether, anchors, anemometer | — | ~$150 | as Path B | days |
+| Helium | — | ~$100–250 | as Path B | days |
+
+**Gate: only order if the quote shows a US warehouse or ≤5-day transit.**
+Otherwise it cannot make 5 Nov.
+
+> **No purchase has been made.** This repo sources and links only.
+
+---
+
 ## Status: PLANNING — feasibility verification in progress
 
 Nothing has been procured, fabricated or flashed. Read `docs/PLAN-bent-pipe-2026-11.md`
