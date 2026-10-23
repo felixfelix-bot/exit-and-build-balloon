@@ -81,7 +81,7 @@ provable rather than asserted.
 
 | Item | Spec | Where | Notes |
 |---|---|---|---|
-| Telescoping / tilt-over mast | 20–40 ft, holds ~150 g payload | **NO VENDOR SOURCED** | Must survive the same 9 kn go/no-go rule as the tether. **Not sourced** — do not invent one. Route to settle: any US telescoping push-up mast / surveyor tripod supplier (McMaster-Carr, REI, ham-radio suppliers all stock variants); confirm payload head and guy-point before ordering. |
+| Telescoping fibreglass mast | 30–40 ft, ≥200 g top payload, 3+ guy points | **Jackite Inc (US) — best lead**, product page not yet confirmed | See **`docs/MAST-SPEC.md`** for the verified vendor survey (Jackite HTTP 200; DX Commander/Spiderbeam 403; SOTABEAMS 404; MFJ 429; REI unreachable). **Fibreglass preferred — a metal mast detunes the antenna under test.** No SKU or price confirmed yet; do not quote the third-party "~\$1/ft" review figure as a price. |
 
 ---
 

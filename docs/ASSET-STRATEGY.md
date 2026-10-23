@@ -152,7 +152,10 @@ harder to argue with.
 - [ ] **A2.** Quote the Helikite today (`info@helikites.com`). Gate: US warehouse
       or ≤5-day transit, else drop it.
 - [ ] **A3.** Buy the latex sphere + HI-FLOAT kit.
-- [ ] **A4.** Source the mast (US, 20–40 ft, guy-points, ~150 g head).
+- [ ] **A4.** Source the mast — spec + verified vendor survey now in
+      **`docs/MAST-SPEC.md`**. Best lead: **Jackite Inc (US), fibreglass telescoping
+      poles** (https://www.jackite.com/antenna, HTTP 200). Still need model + price.
+      Blocks the order, not the plan.
 - [ ] **A5.** Get landowner permission **only if** flying the balloon; the mast
       alone needs none.
 - [ ] **A6.** Update the runbook's headline measurement to the mast-height
