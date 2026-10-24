@@ -187,12 +187,39 @@ operation under WiFi interference (RX active ~2.5 min at 868 MHz, ~5 min at
 
 ---
 
+## V8 — CAN THE STM32 BE THE BRIDGE AT ALL? (new 2026-10-23)
+
+**Context:** the E80 board is now the relay (D14). Its STM32F103C8T6 at 72 MHz must
+do what an ESP32-C3 at 160 MHz did in `fips_bridge.cpp`: relay opaque frames
+between UART and the LR2021 at 921600–2 Mbaud.
+
+**This is unproven.** The ESP32-C3 figure was never measured either, so there is no
+baseline to compare against — but 72 MHz is the lowest clock in the project.
+
+- [ ] V8.1 Measure a UART↔SPI relay loop at 2 Mbaud with fixed 255 B frames.
+      Record sustained bytes/sec and dropped frames.
+- [ ] V8.2 Compare against the requirement: one 1404 B FIPS datagram = 3 × 511 B
+      FLRC frames; the RF hop is 9.6 ms, so the serial side must beat ~122 ms.
+- [ ] V8.3 Test with FLRC-1300 active (not just loopback) — SPI contention with the
+      radio matters.
+- [ ] V8.4 If throughput is insufficient, record the ceiling and decide: lower
+      fragment size, drop to FLRC-650, or reintroduce a faster MCU.
+- [ ] V8.5 Verdict: STM32 bridge adequate / adequate with limits / not adequate
+
+**Do this before writing the bridge firmware**, not after — it decides whether the
+firmware is worth writing.
+
+---
+
 ## V7 — Firmware gaps (from `ARCH-5NODE` §4) — verify against the real tree
 
 These are **code changes**, not board tests, but confirm the diagnosis on the
 actual `fips_bridge.cpp`:
 
-- [ ] V7.1 **C1 (REQUIRED, ~1.5 d)** — confirm there is no single owner of the
+- [ ] V7.1 **C1 (REQUIRED, ~1.5 d)** — ⚠️ **this is ESP-IDF code and does not run
+      on an STM32.** Confirm the diagnosis (no single owner of the radio state
+      machine) still applies to the E80 bench firmware, then implement it there.
+      Original note: confirm there is no single owner of the
       radio state machine: one task fires raw SPI TX while another drives
       `standby()`/`startReceive()`. Only the SPI *bus* is mutexed, not the radio
       *state machine*. **This is the most likely cause of the 3–5 min lockup and
