@@ -165,8 +165,8 @@ resets the radio after 15 s of no valid FIPS frame.
 |---|---|
 | E80 boards flashable (SWD works) | **OPEN** — see `docs/E80-VERIFICATION-CHECKLIST.md` V1 |
 | 915 MHz sweep passes | **OPEN** — V3. Fall back to 2.4 GHz if it fails |
-| Bridge firmware C1/C4/C5/C6 | **OPEN** — see `reports/ARCH-5NODE-BENT-PIPE-2026-11.md` §4 |
-| `serial_udp_bridge.py` at ≥921600 baud | **OPEN** — at 115200 it caps the link at 11.5 kB/s, 4× worse than the radio |
+| STM32 bridge firmware on the E80 (framing, FLRC pipe, watchdog) | **OPEN** — `fips_bridge.cpp` is ESP-IDF and does NOT run on STM32. See README "Why the ESP32-C3 was in the plan" |
+| Host↔E80 serial link at ≥921600 baud | **OPEN** — at 115200 it caps the link at 11.5 kB/s, 4× worse than the radio. The E80 console supports 2 Mbaud |
 | Helikite ordered and delivered | **OPEN** — UK lead time is the longest item |
 | Written landowner permission | **OPEN** — operator action |
 

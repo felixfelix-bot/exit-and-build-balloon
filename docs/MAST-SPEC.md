@@ -34,7 +34,7 @@ mast demo proceeds unchanged.
 |---|---|---|
 | **Deployed height** | **30–40 ft** (target 40) | Must exceed the ~6 m (20 ft) cedar canopy by as much as possible. 40 ft gives ~20 ft of clearance; more is better but availability drops |
 | **Retracted length** | ≤5 ft | must fit a vehicle |
-| **Top-payload capacity** | **≥200 g** comfortably | payload is ~150 g (ESP32-C3 + LR2021 + feed wire) + mount + wind load |
+| **Top-payload capacity** | **≥200 g** comfortably | payload is the **E80 board** (STM32F103 + LR2021 + CH340 + 2 SMA jacks) + feed wire + mount + wind load. **Its mass is NOT yet measured** — weigh it before sizing the mast head |
 | **Guy points** | ≥3, at ≥2 heights, below the top section | a 40 ft pole needs support in the upper third or it whips |
 | **Wind rating** | **≥25 kn static, guyed** | the balloon's 9 kn rule does not apply, but the pole still has a structural limit |
 | **Material** | fibreglass preferred | non-conductive — the payload is a radio, and a metal mast is a detuned antenna next to the antenna under test |

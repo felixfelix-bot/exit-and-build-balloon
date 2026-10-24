@@ -199,7 +199,7 @@ from the store's own Shopify `products.json` on 2026-10-23; its integer fields a
 > (US routed via Yanwen Express Line). **Total 14–37 working days → lands
 > ≈ 12 Nov – 17 Dec 2026. It MISSES the 5 Nov event.**
 >
-> **Therefore the event build must use existing inventory** (D10: 20× ESP32-C3
+> **Therefore the event build must use existing inventory** (D10: the E80 boards + 20× ESP32-C3
 > Mini V1, 4× NiceRF LR2021, 3× E28-2G4M27S). Order anyway for spares — just do
 > not plan the demo around arrival.
 
@@ -231,7 +231,8 @@ Product page (carries the whole E80 variant matrix):
 | LR2021 bare chip / dev kit | Semtech page HTTP 200, **no published price**. DigiKey = **403 blocked**, Mouser = **no connection** from this host → **UNVERIFIED** |
 | NiceRF LoRa2021 module | `nicerf.com` HTTP 200; the specific module path returned **404** → **UNVERIFIED**, need the right URL |
 | E28-2G4M27S (SX1281, +27 dBm) | EBYTE store, listing verified |
-| ESP32-C3 boards, LiPo, JST-PH, anemometer | Adafruit + PiShop reachable (HTTP 200 on search paths) — specific SKUs not pinned |
+| **ESP32-C3 boards — NO LONGER REQUIRED** | The E80 board supplies MCU + USB bridge + radio. Listed only for completeness; do not buy |
+| LiPo, JST-PH, anemometer | Adafruit + PiShop reachable (HTTP 200 on search paths) — specific SKUs not pinned |
 
 **Every unverified row above carries a real reason and a route to settle it.** None
 of them were invented. See the sourcing report's §10 for the full HTTP status log.
@@ -249,7 +250,7 @@ run 96 h with an overnight.
 | | Value |
 |---|---|
 | Total energy needed over 96 h | **~14.4 Wh** at **~0.15 W** average |
-| Load | ESP32-C3 + LR2021, mostly-RX, **30–60 mA at 3.3 V** |
+| Load | **E80 board** (STM32F103 + LR2021), mostly-RX, **~30–60 mA at 3.3 V** — unmeasured, treat as an estimate |
 | Storage sizing | 14.4 Wh ÷ 3.3 V ≈ **4.4 Ah** of usable energy, plus overnight margin and conversion losses — this is not a supercap |
 | Existing repo design mass | 12× 52×19 mm cells + BAT54 + 1.0 F 5.5 V supercap + TPS7A02 ≈ **25–35 g** |
 

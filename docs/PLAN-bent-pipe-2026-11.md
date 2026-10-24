@@ -38,7 +38,7 @@ protocol work on the balloon. The balloon is a dumb pipe.
 | **D8b** | **ASSET PRIORITY REVISED: mast PRIMARY; latex sphere second; Helikite only on a US-warehouse/<=5-day quote.** Supersedes D8a's ordering. | A mast is **not a balloon** — 14 CFR 101 Subpart B and Part 77 do not apply below 200 ft, so **no landowner airspace permission, no notice, no streamers, no deflation device, and no wind rule.** It cannot be blocked, whereas the Helikite is UK-only with no US reseller found and a 1-3 week transit against a 5 Nov event. Honest limit: 20-40 ft does not clear a 6 m cedar canopy by much, so the mast buys **relay + measurement**, probably not the full over-the-trees link. See `docs/ASSET-STRATEGY.md`. |
 | **D12a** | **The E80 boards are in GERMANY and the event is in TEXAS.** EBYTE's own policy is 7 working days processing + 7-30 working days shipping, and US orders route via Yanwen Express Line — **14-37 working days lands 12 Nov - 17 Dec. It MISSES the event.** | So the EBYTE order is **not "insurance"** — it is the only US source and it is too slow. The real paths are (a) ship the German bench boards to Texas, or (b) pay express and accept ~10-14 days. **Start today.** See `docs/ASSET-STRATEGY.md` s1. |
 | D13 | **Outbound messages are DRAFTS only. Nothing is sent without the operator's approval.** | Operator instruction 2026-10-23: the airspace message waits for the operator's friend to review; the Helikite enquiry is blocked on missing nomail credentials anyway. Both are staged in `docs/OUTBOUND-DRAFTS.md`. |
-| D10 | **Do NOT fabricate the v10 hub PCB** | JLCPCB 2-layer + assembly is ~2 weeks — lands on the event with zero margin. Existing inventory (20× ESP32-C3 Mini V1, 4× NiceRF LR2021, 3× E28-2G4M27S) builds a working rig today. |
+| D10 | **Do NOT fabricate the v10 hub PCB** | JLCPCB 2-layer + assembly is ~2 weeks — lands on the event with zero margin. **The E80 board is the rig** (STM32 + LR2021 + CH340 + antennas), so no new hardware is needed. |
 | D11 | **Buy nothing ourselves; source and link only** | Operator instruction. Deliverable is a shopping list with verified US links. |
 | **D12** | **POWER: feed the payload from the ground through the tether** — raise the feed to ~12 V and regulate at the payload, rather than passing 3.3 V over 45 m. REJECTED: **solar** — a 4-day tether needs ~14.4 Wh at ~0.15 W average, and the existing repo solar design (12 cells + 1.0 F supercap + TPS7A02, 25–35 g) is intermittent and adds an overnight failure mode. | The rig is tethered, so a conductor is already available and the ground has unlimited power. AWG28 pair at 150 ft = 66 g / 9.7 Ω per leg → 0.97 V loop drop at 50 mA, 0.39 V at 20 mA; at a 12 V feed the drop is ~0.24 V (2 %). DC drop is manageable at the real duty cycle; a 3.3 V feed over 45 m is not. See `shopping-list.md` §6.1. **OPEN ITEM:** the copper pair runs alongside the Dyneema load line — keep it off the antenna feed and measure desensitisation (no one has checked this). Part choice is UNVERIFIED pending datasheet. |
 
@@ -109,14 +109,27 @@ The ray leaves an endpoint at 1.5 m and rises linearly. At 800 m separation and
 ## 3. Architecture
 
 ```
-laptop A ── fips ── PTY ── serial_udp_bridge.py ── USB CDC ── ESP32-C3 ── LR2021 ──┐
-                                                                                 │ 915 MHz
-                                                              BALLOON  relay     │ slot 6
-                                                                                 │ 915 MHz
-laptop B ── fips ── PTY ── serial_udp_bridge.py ── USB CDC ── ESP32-C3 ── LR2021 ──┘
+laptop A ── fips ── PTY ── serial bridge ── USB ── STM32F103 ── SPI ── LR2021 ──┐
+                          (CH340 on-board)                                       │ 915 MHz
+                                                              RELAY (mast or     │
+                                                               balloon)          │ 915 MHz
+laptop B ── fips ── PTY ── serial bridge ── USB ── STM32F103 ── SPI ── LR2021 ──┘
 ```
 
-Chain at both ends: `fips → PTY → serial_udp_bridge.py → USB CDC → ESP32-C3 → LR2021 → antenna`
+**The E80 board IS the bridge.** STM32F103C8T6 (72 MHz) + on-board CH340 +
+LR2021 + two SMA jacks. **No ESP32-C3.** See README "Why the ESP32-C3 was in the
+plan" — the C3 was inherited from an older rig that had a bare module with no MCU.
+
+> ⚠️ **Firmware implication:** `fips_bridge.cpp` is ESP-IDF code and does not run
+> on an STM32. The work becomes "add a bridge mode to the E80 bench firmware",
+> which is smaller (LR2021 driver + FLRC already linked) but lands on the board
+> whose **flash path is currently failing**. V1 now gates everything.
+```
+
+
+```
+
+Chain at both ends: `fips → PTY → serial bridge → USB (CH340) → STM32F103 → SPI → LR2021 → antenna`
 
 The balloon carries the **same modem pair, cut-through** — no FIPS in the air.
 
@@ -227,7 +240,7 @@ rule. Operating procedure: `docs/RUNBOOK-event-operations.md`.
 |---|---|---|
 | B7 | **The asset choice was wind-infeasible.** A foil cluster sits at 85 deg / 12 ft effective height at 8 kn, and Nov daylight is >=8 kn half the time. | **Resolved by D8a** (Helikite + mast). Order the Helikite first — UK transit + customs is the longest lead time in the list. |
 | B8 | **300 ft is off the table.** 14 CFR Part 77 s77.9(a) requires notice >200 ft AGL; Form 7460-1 wants 45 days; the FAA OE/AAA portal is **closed by the government shutdown** and is refusing new notices. | **Resolved by D9** — cap at 150-200 ft, accept the reduced near-end clearance, solve it by anchoring/siting. |
-| B9 | **`serial_udp_bridge.py` at 115200 baud caps the system at 11.5 kB/s = 122 ms per 1404 B datagram — 4x worse than the radio chain.** | **Open.** Must be >=921600 baud. Cheap fix, but it is a prerequisite, not a tuning step. |
+| B9 | **The host↔board serial link at 115200 baud caps the system at 11.5 kB/s = 122 ms per 1404 B datagram — 4x worse than the radio chain.** | **Open.** Must be >=921600 baud (the E80 console already supports 2 Mbaud). Cheap fix, but it is a prerequisite, not a tuning step. |
 | B10 | **Drone + invisible Dyneema line.** The largest on-site safety exposure and **no regulation covers it**. | **Open.** Drone pilot brief, 100 ft no-fly cylinder, whole-line marking. |
 | B11 | **Helium grade trap.** Consumer tanks are >=80% He (Balloon Time's own sell sheet) = **20% lift penalty**; site lift is **28 g/ft3, not 1.02 kg/m3**. | **Resolved in `shopping-list.md`** — buy balloon-grade >=99.99%. |
 
@@ -243,9 +256,9 @@ rule. Operating procedure: `docs/RUNBOOK-event-operations.md`.
    trigger has an inverted incentive: MMP heartbeats every 10 s mean more peers →
    more valid frames → **the watchdog never trips precisely when the radio is
    broken.**
-3. **The serial bridge is 4× slower than the relay chain.** `serial_udp_bridge.py`
-   at 115200 baud = 11.5 kB/s = 122 ms per 1404 B datagram. **≥921600 baud is a
-   prerequisite.**
+3. **The serial link is 4× slower than the relay chain.** At 115200 baud =
+   11.5 kB/s = 122 ms per 1404 B datagram. **≥921600 baud is a prerequisite**,
+   and the E80 console already runs at 2 Mbaud.
 4. **The balloon may add nothing.** Decide its purpose (obstruction bypass vs
    demonstration) before rigging, or it is an expensive way to halve throughput.
 5. **Procurement lead time.** The `-900MBL-02` is realistically an

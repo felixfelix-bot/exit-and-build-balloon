@@ -16,12 +16,17 @@ makes no routing decision. FIPS runs on laptops on the ground; the balloon is a
 PHY repeater between them. This is the ADR-014 bent-pipe contract.
 
 ```
-laptop A ── fips ── PTY ── serial_udp_bridge.py ── USB CDC ── ESP32-C3 ── LR2021 ──┐
-                                                                                 │ 915 MHz
-                                                                       BALLOON relay
-                                                                                 │ 915 MHz
-laptop B ── fips ── PTY ── serial_udp_bridge.py ── USB CDC ── ESP32-C3 ── LR2021 ──┘
+laptop A ── fips ── PTY ── serial bridge ── USB ── STM32F103 ── SPI ── LR2021 ──┐
+                                   (CH340 on-board)                             │ 915 MHz
+                                                                          RELAY (mast
+                                                                           or balloon)
+                                                                                │ 915 MHz
+laptop B ── fips ── PTY ── serial bridge ── USB ── STM32F103 ── SPI ── LR2021 ──┘
 ```
+
+> **The relay is the E80 board itself** — its STM32F103 is the MCU, its on-board
+> CH340 is the USB bridge, and its LR2021 is the radio. **No ESP32-C3 is required.**
+> See "Why the ESP32-C3 was in the plan" below.
 
 ## Shopping overview — pick a path
 
@@ -100,6 +105,73 @@ industrial balloon-grade. Site lift is **28 g/ft³** at 471 m, not sea-level.
 Otherwise it cannot make 5 Nov.
 
 > **No purchase has been made.** This repo sources and links only.
+
+---
+
+## Why the ESP32-C3 was in the plan — and why it should not be
+
+**Corrected 2026-10-23 (operator challenge).** The architecture diagrams previously
+showed `ESP32-C3 ── LR2021` between the laptop and the radio. That was **wrong as
+a design choice**, and the reason is instructive: it was copied from an older
+bridge (`mesh-stack/flrc-bench-espidf/main/fips_bridge.cpp`) that exists only
+because *that* rig had a bare LR2021 module with no MCU attached. The E80 board
+**has an MCU attached**.
+
+### What the E80 already provides
+
+| Need | E80 board | ESP32-C3 would add |
+|---|---|---|
+| MCU | **STM32F103C8T6, 72 MHz** | redundant |
+| USB↔serial bridge | **on-board CH340** | redundant |
+| Radio | **LR2021 on SPI** | redundant |
+| Dual-band antennas | **two SMA-K jacks** | redundant |
+| Debug | SWD header | — |
+| GPIO / LEDs / keys | 3 LEDs, 2 keys, headers | — |
+
+**Every part of the ESP32-C3's job is already on the E80.** Using it would mean
+wiring an external MCU to a board that already has one — more parts, more points
+of failure, more mass, and a second toolchain (ESP-IDF) for no capability.
+
+### What has to change in the firmware
+
+The repo's working bridge (`fips_bridge.cpp`) is **ESP-IDF code for an ESP32-C3**.
+It cannot be dropped onto an STM32F103. But the E80 bench firmware already
+provides the hard half:
+
+- ✅ **LR2021 driver** — full Semtech LR20xx v1.3.1 linked (LoRa, FSK, **FLRC**,
+  LR-FHSS, 802.15.4, …). No new radio work.
+- ✅ **UART command console** at 115200/2 M baud, and a **transparent
+  serial→radio mode**: *any unrecognised UART byte is transmitted over the air as
+  received*.
+- ❌ **No FLRC bridge path** — the transparent mode is hardcoded to LoRa and a
+  fixed payload length. FLRC is compiled in and switchable via `MOD flrc <br>`,
+  but the transparent pipe does not use it.
+- ❌ **No stream framing** — no SLIP/COBS, no FIPS-magic detection, no variable
+  length, no relay queue.
+- ❌ **No watchdog / unattended hardening.**
+
+So the work is **"add a bridge mode to the existing STM32 bench firmware"**, not
+"port an ESP32 application". It is smaller than the original C1–C6 task list,
+because the radio layer is solved.
+
+### Consequences that change the plan
+
+1. **The ESP32-C3 leaves the BOM.** Existing stock is unaffected (owned already),
+   but it is no longer a required part and must not appear in the critical path.
+2. **The bridge becomes a firmware task on a board we already have** — and the
+   board is already the thing under test, so **there is one rig, not two**.
+3. **The E80's known blockers become the bridge's blockers** — above all the
+   **flash path** (SWD-only, currently failing). If the board cannot be reflashed,
+   it cannot become the bridge either. `docs/E80-VERIFICATION-CHECKLIST.md` V1
+   therefore gates *more* than before, not less.
+4. **New open item:** whether the STM32 bridge can hold a FIPS session at the
+   required throughput. **72 MHz with a UART↔SPI relay is plausible but unproven**
+   — it must be measured, not assumed. The ESP32-C3 at 160 MHz was never measured
+   either. This is now an explicit bench task (see checklist V8).
+
+> **Honest framing: this is a simplification, not a free win.** It removes a part
+> and a toolchain, and it concentrates the risk on one board that is currently
+> unflashable. The flash path was already the first gate; it is now the only gate.
 
 ---
 
