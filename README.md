@@ -131,29 +131,72 @@ with Semtech's datasheet, trust Semtech and the part number on the silkscreen.**
 on the PA.** Do not accept `SX1262` (sub-GHz only, no 2.4 GHz) or `SX1276`
 (sub-GHz only) because they are cheaper or in stock.
 
-#### 3. The same trap on the E28
+#### 3. The E28 is *worse* than a trap — **EBYTE's own documents contradict each other**
 
-EBYTE's `E28-2G4M**` family mixes chips across part numbers:
+> #### 🛑 Correction to what I told you earlier
+>
+> I previously wrote that `E28-2G4M20S` / `M12S` were "different chips, verify" and
+> implied the three `E28-2G4M27S` we already own could do ranging. **Both of those
+> claims are wrong or unsupported, and the second one matters.**
+>
+> **What the repo says:** five separate `balloon-fresh` documents call
+> `E28-2G4M27S` an **SX1281**, including `docs/inventory.md` and
+> `docs/component-guide.md`.
+>
+> **What EBYTE's manuals say:** the `E28-2G4M27S` user manual says **SX1280**, and
+> so does the `E28-2G4M27SX` spec sheet — while the `E28-2G4M20S` spec sheet and
+> `cdebyte.com`'s product pages say **SX1281** for every `M*` module including
+> `M27S`.
+>
+> **Both — same vendor, same part number, different chip.** That is not a listing
+> typo; it is inside EBYTE's own PDFs.
 
-| Part | Chip | Ranging | Notes |
-|---|---|---|---|
-| **`E28-2G4M27S`** | **SX1280** ✅ | **yes** | +27 dBm PA; **3 already owned** |
-| `E28-2G4M20S` | SX1281-ish family, 20 dBm | ❓ verify | cheaper |
-| `E28-2G4M12S` | 12 dBm variant | ❓ verify | cheapest |
+| Source | `M27S` chip | Ranging |
+|---|---|---|
+| `cdebyte.com` product pages (M27S, M20S, M12S) | **SX1281** | no |
+| `E28-2G4M20S` spec sheet (Chinese) | **SX1281** | no |
+| `E28-2G4M27SX` spec sheet | **SX1280** (`SX1280`, ToF listed) | yes |
+| `E28-2G4M27S` user manual | **SX1280** | yes |
+| `balloon-fresh` docs ×5 (incl. `inventory.md`) | **SX1281** | no |
 
-**Verified:** the repo already holds **3× `E28-2G4M27S`** and its bench firmware
-reports `chip="SX1280 V3B A9B7"` on the T3S3 — that string is a **bring-up check
-that the right chip is fitted** (checklist V2.3). **Use it:** after flashing,
-`STAT?` must say **SX1280**. If it says anything else, the part is wrong and no
-amount of configuration fixes it.
+**What is not in dispute — Semtech's product pages, which name ranging in the page title:**
 
-> **Price/provenance note:** the LilyGO **$23.65** figure comes from a search
-> result snippet. `lilygo.cc` returned **HTTP 429** (rate-limited) when checked,
-> so that price was **not read off the vendor page**. Treat it as indicative and
-> confirm at checkout. The **Amazon ASIN above returned HTTP 200** and is a
-> `T3S3 V1.2 ESP32-S3` listing — but **the Amazon listing does not always expose
-> which chip variant you are buying**, which is exactly the trap this section is
-> about.
+| Part | Semtech page title | Ranging |
+|---|---|---|
+| **SX1280** | *"SX1280, 2.4 GHz **With Ranging**"* | **yes** |
+| **SX1281** | *"SX1281, 2.4 GHz **Without Ranging**"* | **no** |
+
+They are **pin-compatible QFN-24 with identical RF performance**. Nothing on the
+board, the silkscreen or the price tells you which one you got.
+
+##### What to actually do about it
+
+**1. Do not buy the E28 expecting ranging.** Its chip identity is documented
+inconsistently *by the manufacturer*, so it cannot be specified safely. Buy the
+**LilyGO T3S3 SX1280 variant** for ranging — LilyGO names the variant on the
+product selector, so the specification is unambiguous at checkout.
+
+**2. Never order by module name alone.** The `E28-2G4M**` family also varies on a
+*second* axis nobody lists clearly — `M27S` / `M20S` / `M12S` / `M20SX` /
+`M12SX` / `M27SX` / `2G4T12S`, across 20/27 dBm output and SMD vs TTL. Part
+numbers that look adjacent are different parts.
+
+**3. Verify on arrival, don't trust the listing.** After flashing, `STAT?` must
+report `chip="SX1280 V3B A9B7"` — that is checklist **V2.3**. If it says anything
+else, no amount of configuration fixes it, and the part goes back.
+
+**4. Filed upstream, not just noted here.** The contradiction is now recorded as
+`balloon-fresh` `docs/OPEN-ITEMS-E28-CHIP-IDENTITY.md` (branch
+`fix/e28-chip-identity` @ `5c0c5f78`) and registered as an **OPEN** parameter in
+the repo's `docs/ssot/parameters.json`, with a gate that fails on any *new*
+un-annotated claim that the owned module can range.
+
+**5. This has burned the repo before.** `balloon-fresh` ADR-017 was written on a
+misdiagnosis of exactly this kind — SX1280 opcodes sent to an LR2021, garbage
+read back, misread as "the chip responds to SX1280". ADR-017 is **SUPERSEDED by
+ADR-020**; the chip was always LR2021 and the raw 2-byte-opcode SPI code was
+correct. **A chip-identity conclusion drawn from SPI probing alone is not
+evidence.** Read the part number off the module label, or query it.
 
 **Totals**
 
