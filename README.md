@@ -39,19 +39,52 @@ Full pricing, alternatives and reasoning: [`docs/PURCHASE-PLAN.md`](docs/PURCHAS
 | Item | Qty | 💰 **CHEAPEST** (link + price) | 🚚 **ARRIVES ON TIME** (link + price) | Delta |
 |---|---|---|---|---|
 | **`E80-900MBL-02`** eval board — STM32F103C8T6 + LR2021 | **3** | **AliExpress** ~**$13–14 ea** · ~**$40 / 3**<br>https://www.aliexpress.com/item/1005012863308600.html | **RobotShop / Botstore** **$18.80 ea** · **$56.40 / 3**<br>https://www.robotshop.com/products/botstore-e80-900mbl-02-dual-band-lora-module-development-board | **+$16.40** to arrive |
-| **ESP32-C3 dev board** — second SWD flash probe | **2** | **Amazon** **$9.99 / 2** (AITRIP)<br>https://www.amazon.com/s?k=ESP32-C3+SuperMini | **Amazon** — same vendor arrives in 2–4 d<br>*alt:* **Adafruit** ~$10 ea https://www.adafruit.com/category/968 · **SparkFun** https://www.sparkfun.com/categories/999 | **$0** — same source |
+| **ESP32-S3 dev board** — one per E80 (3), plus one spare as SWD probe | **4** | **Amazon** ~$5–6 ea · ~**$22 / 4**<br>https://www.amazon.com/s?k=ESP32-S3+SuperMini | **Amazon** — same, 2–4 d<br>*alt:* **Adafruit** https://www.adafruit.com/category/968 · **SparkFun** https://www.sparkfun.com/categories/999 | **$0** — same source |
 | **Silicone wire + Dupont jumpers/headers** — SWD harness | 1 set | **Amazon** ~**$8–10**<br>https://www.amazon.com/s?k=dupont+jumper+wires+40pin | **Amazon** — same, 2–4 d<br>*alt:* **Adafruit / SparkFun** ~$14 | **$0** — same source |
 | **Fibreglass telescoping mast** — Jackite 28 ft | 1 | **Hamsource** **$62.84**<br>https://hamsource.com/product/28-jackite-pole-black/ | **Hamsource** — same, **in stock**, US domestic<br>*(the 31 ft is **out of stock** in all three colours)* | **$0** — same source |
 | **Guy wire ring** — 3 × 5/16″ holes | 1 | **Hitched4fun** **$2.95**<br>https://www.hitched4fun.com/product/1-inch-guy-wire-ring-for-31-ft-jackite-fiberglass-telescoping-pole/ | **Hitched4fun** — same, US | **$0** — same source |
 | **Antenna Mast Guying Kit** — cord + tensioners + stakes | 1 | **Hitched4fun** **$45.95** (sale, list $68.52)<br>https://www.hitched4fun.com/product/antenna-mast-guying-kit-for-jackite-31-ft-ham-ready/ | **Hitched4fun** — same, US | **$0** — same source |
 
+### Optional — organisers asked for the balloon anyway
+
+They want to try it despite the cost and the short notice. These are **not
+required** for the relay test; they are additive, and the last two have lead
+times that likely miss 5 Nov. See `analysis/BALLOON-TRADEOFFS.md`.
+
+| Item | Qty | 💰 **CHEAPEST** | 🚚 **ARRIVES ON TIME** | Delta |
+|---|---|---|---|---|
+| **Latex sphere 36–48 in** (spheres, not foil) | 4–6 | US party retail ~$10–30 ea | same — US retail, days | **$0** |
+| **HI-FLOAT barrier coat** | 1 kit | ~$10–20 | same, days | **$0** |
+| **Helium, balloon-grade ≥99.99 %** | see §helium | **$0.33/ft³** USGS Grade-A base (~$330/Mcf) — industrial distributor | **Airgas SA (210) 337-7255** · nexAir · Linde · Matheson — will-call, days | **$0** — same vendor |
+| *Party-tank fallback (one-hour demo only)* | — | Tractor Supply Bandera · Walmart/H-E-B Kerrville: 8.9 ft³ **$56.99**, 14.9 ft³ **$75.99** = **$5.10/ft³** | same day, in store | **+15×** per ft³ |
+| **Helikite** (sub-200 g or larger) | 1 | **Allsopp Helikites (UK)** quote-only<br>https://www.helikites.com/shop · `info@helikites.com` · +44 1425 654967 | ⚠️ **UK only — 1–3 wk + customs. Almost certainly MISSES 5 Nov** | no US source found |
+
+> **How much helium depends entirely on the balloon you choose**, and that is the
+> whole point of the trade study: cost scales with **D³**, so a 96 in sphere needs
+> **483 ft³ over four days** (~$579 at $1.20/ft³) while a 60 in needs **118 ft³**
+> (~$141). **Do not order helium before picking a diameter** —
+> `analysis/BALLOON-TRADEOFFS.md` has the table.
+>
+> ⚠️ **The Helikite is the item most likely to fail on time.** No US reseller was
+> found (searched 2026-10-23); it ships from the UK with 1–3 weeks transit plus
+> customs against a 5 Nov event. **Gate: only order if the quote shows a US
+> warehouse or ≤5-day transit.**
+
 **Totals**
 
 | | 💰 Cheapest | 🚚 On time |
 |---|---|---|
-| Basket | **≈ $160–175** | **≈ $188–202** |
+| Basket (relay test only) | **≈ $163–178** | **≈ $191–205** |
 | E80 boards alone | $40 | $56.40 |
 | **Would it make 5 Nov?** | ❌ **no** — E80 ships from China, 7–15 d + customs | ✅ **yes** |
+| **+ optional balloon** | helium **$33–1,954** depending on diameter | ✅ helium yes; ⚠️ **Helikite likely no** |
+
+> **One ESP32-S3 per E80 board.** Three E80s = three S3s, plus a fourth as the
+> spare SWD probe. **S3, not C3** — 240 MHz dual-core and 2 MB PSRAM, so it can
+> host a bridge or packet pipeline without being the bottleneck, and it is the
+> board `balloon-fresh` ADR-028 already designates as the application-MCU
+> migration target. `ESP32-C3 SuperMini` is ~$9.99/2 but is the part that measured
+> **838 kbps** at the radio layer; the S3 costs ~$2 more per board.
 
 **The only line where the two columns differ is the E80 board.** Everything else
 is a single US vendor that is simultaneously cheapest and fast.
