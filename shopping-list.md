@@ -203,18 +203,58 @@ from the store's own Shopify `products.json` on 2026-10-23; its integer fields a
 > Mini V1, 4× NiceRF LR2021, 3× E28-2G4M27S). Order anyway for spares — just do
 > not plan the demo around arrival.
 
+### 🔴 Board count — 3, and inventory is 2
+
+A 2-node bent pipe is **three radios, not two**:
+
+| Role | Board | Where it sits | Notes |
+|---|---|---|---|
+| **bridge-ground A** | E80 #1 | ground, laptop A | USB to laptop, SMA antenna |
+| **bridge-relay** | E80 #2 | **mast head or balloon** | same firmware, relay mode; 20–45 m up |
+| **bridge-ground B** | E80 #3 | ground, laptop B | USB to laptop, SMA antenna |
+
+**The German bench inventory is 2 × `E80-900MBL-02`.** This file's earlier framing
+counted "the bench pair" and did not notice the rig needs one more than a pair.
+
+Three ways to close the gap, and **they are not equally good**:
+
+1. **Order 1 more from EBYTE express** (~$18.56 + express) — **but 14–37 working
+   days surface / ~10–14 days express against a 5 Nov event. Only viable if
+   ordered immediately and express is accepted.**
+2. **Fly two boards, bench with the same two** — legal and cheap, but it means
+   **you cannot relay and measure at the same time**, and it defeats half of the
+   "one rig" property: during a relay run there is no third board watching the
+   link from outside. It also means tearing the bench down to rig the mast.
+3. **Buy the board in the US** — the only US channel found is EBYTE itself, which
+   is the China lead time. A US-warehouse reseller was **not found** (see
+   `reports/ELECTRONICS-SOURCING-US-2026-11.md`). **UNVERIFIED whether any US
+   distributor stocks the `-MBL-02` eval board specifically.**
+
+**Decision needed this week, together with the Germany→Texas shipping question
+(`docs/ASSET-STRATEGY.md` §1).** Shipping 2 boards and ordering 1 express from a
+different origin splits the arrival times and doubles the customs exposure — it
+is worth checking whether shipping **3** (2 owned + 1 ordered to Germany) or
+ordering **1 to a US address** is the cleaner single path.
+
+> ⚠️ **A cheaper hedge that does not need a third eval board:** the bare
+> `E80-900M2212S` module ($9.48) plus an RP2040 Pico already owned can act as a
+> **listen-only sniffer** for a second measurement point — it cannot relay, but it
+> can log PER/RSSI/SNR on the same channel. That restores an independent observer
+> during a relay run without a third eval board. Treat it as a measurement aid,
+> **not** a substitute for the relay board.
+
 ### The critical item — verified prices, in stock
 
 Product page (carries the whole E80 variant matrix):
 `https://ebyteiot.com/products/ebyte-e80-400m2213s-semtech-multi-band-lora-lr1121-chip-21-5-13dbm-433m-2-4ghz-lora-dual-band-wireless-rf-transceiver-module-副本`
 (HTTP 200; the CJK `副本` must be URL-encoded as `%E5%89%AF%E6%9C%AC`.)
 
-| Variant | USD | In stock | Notes |
-|---|---|---|---|
-| **`E80-900MBL-02`** — the EVAL BOARD (STM32F103 + LR2021) | **$18.56** | yes | **The bench item.** This is what `E80-VERIFICATION-CHECKLIST.md` V1 operates on |
-| `E80-900M2212S(LR2021)` — bare module | **$9.48** | yes | Spare |
-| `E80-900M2213S` (LR1121) + 915 FPC + 2.4 G FPC antennas | **$8.25** | yes | Bundle — both antennas included |
-| `E80-400MBL-02` / `-01` | $18.56 / $17.02 | yes | **400 MHz — wrong band for D2** |
+| Variant | Qty | USD | In stock | Notes |
+|---|---|---|---|---|
+| **`E80-900MBL-02`** — the EVAL BOARD (STM32F103 + LR2021) | **3** (2 owned, **buy 1**) | **$18.56 ea** | yes | **The bench item AND the relay.** This is what `E80-VERIFICATION-CHECKLIST.md` V1 operates on |
+| `E80-900M2212S(LR2021)` — bare module | 1–2 | **$9.48** | yes | Spare; also the Pico sniffer path above |
+| `E80-900M2213S` (LR1121) + 915 FPC + 2.4 G FPC antennas | 1 | **$8.25** | yes | Bundle — both antennas included. **LR1121, not LR2021** |
+| `E80-400MBL-02` / `-01` | 0 | $18.56 / $17.02 | yes | **400 MHz — wrong band for D2** |
 
 > ⚠️ **`…M2212S` = LR2021; `…M2213S` = LR1121. Different chips, different
 > datasheets.** The repo's bench inventory is LR2021 → order `2212S` if matching

@@ -16,8 +16,13 @@ failed V1 without deciding the hardware question.
 
 Read the silkscreen on each board and record the exact SKU.
 
-- [ ] Board #1 SKU: `E80-______-02`
-- [ ] Board #2 SKU: `E80-______-02`
+**The rig needs THREE boards** (2 ground + 1 relay — see plan B12). Inventory is
+two, so one of these slots is currently unfilled. Record what you have.
+
+- [ ] Board #1 SKU: `E80-______-02` — assigned role: `ground / relay / bench`
+- [ ] Board #2 SKU: `E80-______-02` — assigned role: `ground / relay / bench`
+- [ ] Board #3 SKU: `E80-______-02`  — **NOT OWNED YET** (B12). Fill this in when
+      the third board lands; until then mark the relay role **unfilled**.
 
 **What the SKUs mean** (from `docs/e80-900mbl-02-eval/E80-900MBL-02_CAPABILITY_REPORT.md`
 and `docs/2G4-LINK-BUDGET-ANALYSIS.md` in `balloon-fresh`):
@@ -208,6 +213,13 @@ baseline to compare against — but 72 MHz is the lowest clock in the project.
 
 **Do this before writing the bridge firmware**, not after — it decides whether the
 firmware is worth writing.
+
+> **Why this gate is cheap now:** the throughput test runs on the *same* board,
+> same SPI bus, same radio that will relay at the event — one image in `bench` vs
+> `relay` mode. A number measured here is a number that applies in the air; there
+> is no second rig to disagree with it. It also means a **failed** V8 is a real
+> verdict on the flying hardware, not a verdict on a bench stand-in that could
+> still be beaten by better kit later.
 
 ---
 

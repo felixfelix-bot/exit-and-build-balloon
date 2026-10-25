@@ -110,16 +110,28 @@ The ray leaves an endpoint at 1.5 m and rises linearly. At 800 m separation and
 ## 3. Architecture
 
 ```
-laptop A ── fips ── PTY ── serial bridge ── USB ── STM32F103 ── SPI ── LR2021 ──┐
-                          (CH340 on-board)                                       │ 915 MHz
-                                                              RELAY (mast or     │
-                                                               balloon)          │ 915 MHz
-laptop B ── fips ── PTY ── serial bridge ── USB ── STM32F103 ── SPI ── LR2021 ──┘
+ GROUND A                                                        GROUND B
+ laptop A ─ fips ─ PTY ─ serial_udp_bridge ─ USB
+                                              │
+                                 ┌────────────┴───────────┐
+                                 │ E80 #1  bridge-ground  │  STM32F103 + on-board
+                                 └────────────┬───────────┘  CH340 + LR2021
+                                              │ 915 MHz FLRC-1300, half-duplex
+                                 ┌────────────┴───────────┐
+                                 │ E80 #2  bridge-relay   │ ← mast or balloon
+                                 └────────────┬───────────┘   20–45 m up
+                                              │ 915 MHz
+                                 ┌────────────┴───────────┐
+                                 │ E80 #3  bridge-ground  │
+                                 └────────────┬───────────┘
+                                              │ USB
+ laptop B ─ fips ─ PTY ─ serial_udp_bridge ───┘
 ```
 
 **The E80 board IS the bridge.** STM32F103C8T6 (72 MHz) + on-board CH340 +
-LR2021 + two SMA jacks. **No ESP32-C3.** See README "Why the ESP32-C3 was in the
-plan" — the C3 was inherited from an older rig that had a bare module with no MCU.
+LR2021 + two SMA jacks. **No ESP32-C3.** All three boards run **one firmware
+image** in three modes (`ground` / `relay` / `bench`) — that is what makes the
+measurement rig and the flying relay the same rig (B12 covers the board count).
 
 > ⚠️ **Firmware implication:** `fips_bridge.cpp` is ESP-IDF code and does not run
 > on an STM32. The work becomes "add a bridge mode to the E80 bench firmware",
@@ -244,6 +256,7 @@ rule. Operating procedure: `docs/RUNBOOK-event-operations.md`.
 | B9 | **The host↔board serial link at 115200 baud caps the system at 11.5 kB/s = 122 ms per 1404 B datagram — 4x worse than the radio chain.** | **Open.** Must be >=921600 baud (the E80 console already supports 2 Mbaud). Cheap fix, but it is a prerequisite, not a tuning step. |
 | B10 | **Drone + invisible Dyneema line.** The largest on-site safety exposure and **no regulation covers it**. | **Open.** Drone pilot brief, 100 ft no-fly cylinder, whole-line marking. |
 | B11 | **Helium grade trap.** Consumer tanks are >=80% He (Balloon Time's own sell sheet) = **20% lift penalty**; site lift is **28 g/ft3, not 1.02 kg/m3**. | **Resolved in `shopping-list.md`** — buy balloon-grade >=99.99%. |
+| **B12** | **The 2-node bent pipe needs 3 boards; inventory is 2.** Two ground bridges plus the relay in the air = 3 × `E80-900MBL-02`. German bench inventory is 2. D14 replaced *two different rigs* with *one rig in two modes*, so the third board is no longer optional overhead — it is what lets you measure while relaying, and what stops the bench from being torn down to rig the mast. | **Open, decision this week.** Route it with the Germany→Texas shipping question (`ASSET-STRATEGY.md` §1), not separately. Options in `shopping-list.md` §6: order 1 express from EBYTE (10–14 d — tight against 5 Nov), fly 2 and accept no concurrent measurement, or find a US stockist (UNVERIFIED). Hedge that needs no third eval board: bare `2212S` module + owned RP2040 as a listen-only sniffer. |
 
 ---
 

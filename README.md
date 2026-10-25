@@ -16,17 +16,28 @@ makes no routing decision. FIPS runs on laptops on the ground; the balloon is a
 PHY repeater between them. This is the ADR-014 bent-pipe contract.
 
 ```
-laptop A ── fips ── PTY ── serial bridge ── USB ── STM32F103 ── SPI ── LR2021 ──┐
-                                   (CH340 on-board)                             │ 915 MHz
-                                                                          RELAY (mast
-                                                                           or balloon)
-                                                                                │ 915 MHz
-laptop B ── fips ── PTY ── serial bridge ── USB ── STM32F103 ── SPI ── LR2021 ──┘
+ GROUND A                                                        GROUND B
+ laptop A ─ fips ─ PTY ─ serial_udp_bridge ─ USB
+                                              │
+                                 ┌────────────┴───────────┐
+                                 │  E80 #1  bridge-ground │  STM32F103 + on-board
+                                 └────────────┬───────────┘  CH340 + LR2021
+                                              │ 915 MHz FLRC-1300, half-duplex
+                                 ┌────────────┴───────────┐
+                                 │  E80 #2  bridge-relay  │ ← mast or balloon
+                                 └────────────┬───────────┘   20–45 m up
+                                              │ 915 MHz
+                                 ┌────────────┴───────────┐
+                                 │  E80 #3  bridge-ground │
+                                 └────────────┬───────────┘
+                                              │ USB
+ laptop B ─ fips ─ PTY ─ serial_udp_bridge ───┘
 ```
 
 > **The relay is the E80 board itself** — its STM32F103 is the MCU, its on-board
 > CH340 is the USB bridge, and its LR2021 is the radio. **No ESP32-C3 is required.**
-> See "Why the ESP32-C3 was in the plan" below.
+> All three boards run **one firmware image** in different modes. See "One rig,
+> not two" below.
 
 ## Shopping overview — pick a path
 
@@ -52,16 +63,23 @@ was read.
 
 ### Common to all paths — the radio
 
-| Item | Price | Source | Ships to Texas |
-|---|---|---|---|
-| **`E80-900MBL-02`** eval board (STM32F103 + LR2021) | **$18.56** | EBYTE, China | ⚠️ **14–37 working days → arrives 12 Nov–17 Dec, MISSES the event** |
-| `E80-900M2212S(LR2021)` bare module | **$9.48** | EBYTE | same |
-| `E80-900M2213S` + 915 & 2.4 G antennas bundle | **$8.25** | EBYTE | same |
-| ESP32-C3 boards, LR2021 modules, E28-2G4M27S | **$0** — already owned | inventory | n/a (in Germany) |
+| Item | Qty | Price | Source | Ships to Texas |
+|---|---|---|---|---|
+| **`E80-900MBL-02`** eval board (STM32F103 + LR2021) | **3** — 2 ground + 1 relay | **$18.56 ea** | EBYTE, China | ⚠️ **14–37 working days → arrives 12 Nov–17 Dec, MISSES the event** |
+| `E80-900M2212S(LR2021)` bare module | 1–2 spare | **$9.48** | EBYTE | same |
+| `E80-900M2213S` + 915 & 2.4 G antennas bundle | 1 spare | **$8.25** | EBYTE | same |
+| ESP32-C3 boards, LR2021 modules, E28-2G4M27S | **$0** — already owned | — | inventory | n/a (in Germany), **not needed for the relay** |
 
 > 🔴 **The one hard constraint:** EBYTE ships from China with 7 working days
 > processing + 7–30 working days transit. **The boards must come from the existing
 > German inventory, or be ordered express and accepted at ~10–14 days.**
+>
+> 🔴 **Count check — the number changed, and it is not 2.** A 2-node bent pipe is
+> **three radios**, not two: one at each ground node *plus one in the air*. The
+> German bench inventory is **2 × E80-900MBL-02**. So the event rig needs **one
+> more board than we own**, or the bench rig comes apart to fly. Decide this
+> together with the Germany→Texas shipping question (`docs/ASSET-STRATEGY.md` §1),
+> not separately — see open item **B12** in the plan.
 
 ### Path A — MAST (headline ~$30–120)
 
@@ -159,12 +177,15 @@ because the radio layer is solved.
 1. **The ESP32-C3 leaves the BOM.** Existing stock is unaffected (owned already),
    but it is no longer a required part and must not appear in the critical path.
 2. **The bridge becomes a firmware task on a board we already have** — and the
-   board is already the thing under test, so **there is one rig, not two**.
+   board is already the thing under test, so **there is one rig, not two**. This
+   has a consequence beyond tidiness: see "One rig, not two" below.
 3. **The E80's known blockers become the bridge's blockers** — above all the
    **flash path** (SWD-only, currently failing). If the board cannot be reflashed,
    it cannot become the bridge either. `docs/E80-VERIFICATION-CHECKLIST.md` V1
    therefore gates *more* than before, not less.
-4. **New open item:** whether the STM32 bridge can hold a FIPS session at the
+4. **Board count is 3, not 2.** A 2-node bent pipe is three radios: two ground
+   bridges plus the one in the air. Inventory is 2. See B12 in the plan.
+5. **New open item:** whether the STM32 bridge can hold a FIPS session at the
    required throughput. **72 MHz with a UART↔SPI relay is plausible but unproven**
    — it must be measured, not assumed. The ESP32-C3 at 160 MHz was never measured
    either. This is now an explicit bench task (see checklist V8).
@@ -172,6 +193,40 @@ because the radio layer is solved.
 > **Honest framing: this is a simplification, not a free win.** It removes a part
 > and a toolchain, and it concentrates the risk on one board that is currently
 > unflashable. The flash path was already the first gate; it is now the only gate.
+
+### One rig, not two — and why that is a measurement property, not a slogan
+
+Before this change there were two different things in the project:
+
+- a **bench rig** that measures the link (PER / RSSI / SNR vs distance), and
+- a **relay** built from a different board (the ESP32-C3) that flies.
+
+The problem with two rigs is that they can disagree silently. A bug in the relay
+— a dropped fragment, a stalled state machine, a bad flush — would show up as
+*"the link performs badly"* in the measurements, while the bench hardware
+underneath was innocent. Worse: the bench could report a clean link for a relay
+that never actually passed the traffic, because the bench never ran that code.
+
+**With the change, the board that measures the link is the board that relays it.**
+
+- The measurement firmware and the relay firmware are **one image in two modes**,
+  on the same silicon, same SPI bus, same radio, same clock.
+- A bridge bug cannot hide behind a separate box — it appears in the very
+  PER/RSSI/SNR numbers being logged, because that path *is* the path.
+- The throughput answer (V8) and the range answer come from the same rig, so a
+  bad number has exactly one candidate explanation to eliminate instead of two.
+- It also kills a class of false confidence: "the bench passed" and "the relay
+  works" become the same statement, which is either true or obviously false.
+
+**What it does not buy:** correctness. A single rig can be wrong in one way and
+report it consistently for four days. It removes *disagreement between rigs*, not
+*miscalibration* — the A/B obstruction test and the independent reference (a
+second receiver, or FIPS' own path-MTU behaviour) are still what keep the numbers
+honest.
+
+**Cost of the change:** the relay and the measurement now contend for the same
+board, so you cannot measure the link while relaying on one board — you need a
+third E80 for that (B10). And a failed flash now fails both jobs at once.
 
 ---
 

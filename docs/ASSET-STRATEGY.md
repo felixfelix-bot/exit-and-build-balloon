@@ -18,7 +18,8 @@ This is not just logistics — it changes which item is on the critical path.
 |---|---|---|---|
 | E80-900MBL-02 eval board | **EBYTE store, China** | yes | **14–37 working days → arrives 12 Nov – 17 Dec. MISSES the event.** |
 | E80-900M2212S module | EBYTE, China | yes | same |
-| Existing E80 boards | **Germany** | **operator must ship them** | transatlantic + customs, ~1–2 weeks, and they are the *bench* unit |
+| Existing E80 boards | **Germany** — **2 owned, 3 needed** | **operator must ship them** | transatlantic + customs, ~1–2 weeks, and they are the *bench* unit |
+| `E80-900MBL-02` — the **missing 3rd board** | EBYTE, China | yes, express only | **~10–14 d express = tight but possible; surface misses.** A 2-node bent pipe is 2 ground + 1 relay. See plan **B12** |
 | Latex sphere + HI-FLOAT | US retail | yes | days |
 | Helikite | Allsopp, UK | quote-only | 1–3 weeks + customs |
 | Mast | US | yes | days |
