@@ -33,75 +33,67 @@
 
 ## Shopping list — order these
 
-Short list, vendors that ship to **Austin, Texas**. Full pricing, alternatives and
-reasoning: [`docs/PURCHASE-PLAN.md`](docs/PURCHASE-PLAN.md).
+Side-by-side, both columns, for every line: **cheapest** and **arrives on time**.
+Full pricing, alternatives and reasoning: [`docs/PURCHASE-PLAN.md`](docs/PURCHASE-PLAN.md).
 
-| # | Item | Qty | Price | Vendor | Ships to Austin |
-|---|---|---|---|---|---|
-| **1** | **`E80-900MBL-02`** eval board (STM32F103C8T6 + LR2021) | **3** | **$18.80 ea** | **RobotShop / Botstore** (US stock, on time)<br>https://www.robotshop.com/products/botstore-e80-900mbl-02-dual-band-lora-module-development-board<br>🇨🇳 **AliExpress alternative (~$13–14, TOO SLOW — see note):**<br>https://www.aliexpress.com/item/1005012863308600.html | ✅ RobotShop. ⚠️ AliExpress ships from China 7–15 d + customs → **likely misses 5 Nov** |
-| **2** | **ESP32-C3 dev board** — second SWD flash probe | **2** | **$9.99 for 2** on Amazon (AITRIP); Adafruit ~$10 ea | **Amazon US** (cheapest) · **Adafruit** https://www.adafruit.com/category/968 · **SparkFun** https://www.sparkfun.com/categories/999 | ✅ domestic, 2–4 days |
-| **3** | **Silicone wire + Dupont jumpers/headers** — SWD harness (SWCLK / SWDIO / GND) | 1 set | ~$8–10 on Amazon; ~$14 at Adafruit | Amazon US, or Adafruit / SparkFun | ✅ domestic |
-| **4** | **Fibreglass telescoping mast** — Jackite 28 ft | 1 | **$62.84** | **Hamsource** (Shelton CT)<br>https://hamsource.com/product/28-jackite-pole-black/ | ✅ US domestic, **in stock**. The 31 ft is **out of stock** in all three colours |
-| **5** | **Guy wire ring** for the pole (3 × 5/16″ holes) | 1 | **$2.95** | **Hitched4fun**<br>https://www.hitched4fun.com/product/1-inch-guy-wire-ring-for-31-ft-jackite-fiberglass-telescoping-pole/ | ✅ US |
-| **6** | **Antenna Mast Guying Kit** (cord + tensioners + stakes) | 1 | **$45.95** | Hitched4fun<br>https://www.hitched4fun.com/product/antenna-mast-guying-kit-for-jackite-31-ft-ham-ready/ | ✅ US |
+| Item | Qty | 💰 **CHEAPEST** (link + price) | 🚚 **ARRIVES ON TIME** (link + price) | Delta |
+|---|---|---|---|---|
+| **`E80-900MBL-02`** eval board — STM32F103C8T6 + LR2021 | **3** | **AliExpress** ~**$13–14 ea** · ~**$40 / 3**<br>https://www.aliexpress.com/item/1005012863308600.html | **RobotShop / Botstore** **$18.80 ea** · **$56.40 / 3**<br>https://www.robotshop.com/products/botstore-e80-900mbl-02-dual-band-lora-module-development-board | **+$16.40** to arrive |
+| **ESP32-C3 dev board** — second SWD flash probe | **2** | **Amazon** **$9.99 / 2** (AITRIP)<br>https://www.amazon.com/s?k=ESP32-C3+SuperMini | **Amazon** — same vendor arrives in 2–4 d<br>*alt:* **Adafruit** ~$10 ea https://www.adafruit.com/category/968 · **SparkFun** https://www.sparkfun.com/categories/999 | **$0** — same source |
+| **Silicone wire + Dupont jumpers/headers** — SWD harness | 1 set | **Amazon** ~**$8–10**<br>https://www.amazon.com/s?k=dupont+jumper+wires+40pin | **Amazon** — same, 2–4 d<br>*alt:* **Adafruit / SparkFun** ~$14 | **$0** — same source |
+| **Fibreglass telescoping mast** — Jackite 28 ft | 1 | **Hamsource** **$62.84**<br>https://hamsource.com/product/28-jackite-pole-black/ | **Hamsource** — same, **in stock**, US domestic<br>*(the 31 ft is **out of stock** in all three colours)* | **$0** — same source |
+| **Guy wire ring** — 3 × 5/16″ holes | 1 | **Hitched4fun** **$2.95**<br>https://www.hitched4fun.com/product/1-inch-guy-wire-ring-for-31-ft-jackite-fiberglass-telescoping-pole/ | **Hitched4fun** — same, US | **$0** — same source |
+| **Antenna Mast Guying Kit** — cord + tensioners + stakes | 1 | **Hitched4fun** **$45.95** (sale, list $68.52)<br>https://www.hitched4fun.com/product/antenna-mast-guying-kit-for-jackite-31-ft-ham-ready/ | **Hitched4fun** — same, US | **$0** — same source |
 
-> ### ⚠️ On the AliExpress link — read before using it
->
-> You asked for the AliExpress version wherever possible, so it is linked above. **I
-> am linking it while recommending against using it for the event**, and the reason
-> is not price:
->
-> - **The listing is real and verified** — `item/1005012863308600.html`, HTTP 200,
->   and it genuinely carries all four E80 variants (2212S / 2213S / MBL-01 /
->   **MBL-02**) on one page. So you can absolutely order the right part there.
-> - **It is ~25–30 % cheaper** — China-side pricing runs **~$13–14** versus
->   RobotShop's $18.80, i.e. about **$15 saved** across three boards.
-> - **It ships from China: 7–15 working days plus customs.** Against a 5 Nov
->   event that is 10 days away, **that is the whole margin**. And the vendor's own
->   policy pages note a **10–20 % chance** of an additional 7–15 day customs delay
->   on US-bound electronics — the exact product category.
-> - **The premium buys the calendar, not the board.** $15 is the cheapest thing on
->   this list per unit of delivery risk removed.
-> - **RobotShop was verified in US stock at $18.80 with 24 h order handling.**
->   AliExpress's per-item ship-from and date were **not** readable (the page
->   returns a bot-wall stub with no price or shipping fields).
->
-> **When the AliExpress link IS the right call:** as a **spare set**, ordered now,
-> for the *next* event — or if the RobotShop order slips and you need a second
-> source. Ordered today with the mast, it arrives after the event.
->
-> **Do not order the `-01` variant.** `E80-900MBL-01` is **LR1121**, not LR2021 —
-> different chip, and its driver is not what the bench firmware links.
+**Totals**
 
-**Basket ≈ $188–202.** Full channel-by-channel cost study, including what is
-cheaper but *too slow*, what is faster but *5× the price*, and a **$0 fallback
-using radios we already own**:
-[`docs/SOURCING-CHEAPEST-ONTIME.md`](docs/SOURCING-CHEAPEST-ONTIME.md).
-**Why not ESP32-S3, and is Amazon cheaper:** [`docs/S3-AND-AMAZON-PRICING.md`](docs/S3-AND-AMAZON-PRICING.md).
+| | 💰 Cheapest | 🚚 On time |
+|---|---|---|
+| Basket | **≈ $160–175** | **≈ $188–202** |
+| E80 boards alone | $40 | $56.40 |
+| **Would it make 5 Nov?** | ❌ **no** — E80 ships from China, 7–15 d + customs | ✅ **yes** |
+
+**The only line where the two columns differ is the E80 board.** Everything else
+is a single US vendor that is simultaneously cheapest and fast.
+
+### Read this before choosing the cheaper column
+
+The E80 is the **one** line where cheapest ≠ arrives, and the gap is **$16.40**.
+
+- **What the $16.40 buys:** 10 days to the event, and the vendor's own policy
+  pages warn of a **10–20 % chance of a further 7–15 day customs delay** on
+  US-bound *electronics* — this exact category. A customs hold doesn't cost you
+  $16, it costs you the experiment.
+- **RobotShop was verified in stock**, US-fulfilled, with 24 h order handling.
+- **AliExpress ship-from and delivery date were not readable** (bot-wall stub, no
+  price or shipping fields), so its 7–15 day figure is the vendor's *general*
+  policy, not a quote for this item.
+
+> **Both links are live and verified** — the AliExpress listing returns HTTP 200
+> and genuinely carries all four E80 variants including the **MBL-02**.
+>
+> ⚠️ **Do not order the `-01` variant.** `E80-900MBL-01` is **LR1121**, not
+> LR2021 — different chip, and its driver is not what the bench firmware links.
+> The same AliExpress page lists several variants; **pick `MBL-02`.**
 
 > ### Cheapest-that-arrives, in one paragraph
 >
-> **RobotShop's $18.80 is both the cheapest and the only E80 channel that makes
-> 5 Nov.** EBYTE direct is $18.56 — 24 cents less — and takes 14–37 working days,
-> arriving 12 Nov – 17 Dec. The China channels (AliExpress ~$13–14, Alibaba $13.83)
-> are genuinely cheaper per board and genuinely useless here — that premium buys
-> the *calendar*, not the board. Seeed's LR2021 kit is US-stock at $99 — 5.3× the
-> price, and it is **not an STM32F103**, so it does not answer the one question we
-> are buying boards to answer.
+> **RobotShop's $18.80 is both the cheapest *and* the only E80 channel that makes
+> 5 Nov** — EBYTE direct is $18.56 but 14–37 working days, landing 12 Nov – 17 Dec.
+> Seeed's LR2021 kit is US-stock at $99 — 5.3× the price, and it is **not an
+> STM32F103**, so it does not answer the question the boards are bought for.
 >
-> **Amazon is cheaper on the commodities:** the ESP32-C3 boards are **$9.99 for
-> two** on Amazon versus ~$20 at Adafruit, and the SWD wire/jumpers are ~$8–10
-> versus ~$14. Taking Amazon on lines 2–3 saves **~$14**. Amazon prices are from
-> search snippets, **not** pages I could verify (every fetch hit a bot-wall) —
-> check before ordering.
+> **Amazon is cheaper on the commodities** — ESP32-C3 boards at $9.99/2 versus ~$20
+> at Adafruit; wire ~$8–10 versus ~$14. Amazon prices are from search snippets,
+> **not** pages I could verify (every fetch hit a bot-wall) — check before ordering.
 >
-> **Two savings worth taking:** the **28 ft** mast ($62.84) instead of the 31 ft
-> ($112.95) saves **$50**; and the guying kit's **sale** price ($45.95, list
-> $68.52) saves **$23**. Together **$73 for the same experiment.**
+> **Two savings worth taking:** the **28 ft** mast ($62.84) over the 31 ft
+> ($112.95) saves **$50**; the guying kit's **sale** price ($45.95, list $68.52)
+> saves **$23**. Together **$73 for the same experiment.**
 >
-> **And one worth checking:** the master inventory lists **20× ESP32-C3 Mini V1**
-> and **2× RP2040-Zero already owned** (recorded as in Germany). If they are
-> reachable in time, **delete lines 2–3 — ~$24–34 for nothing.**
+> **Worth checking:** the master inventory lists **20× ESP32-C3 Mini V1** and
+> **2× RP2040-Zero already owned** (recorded as in Germany). If reachable in time,
+> **delete lines 2–3 — ~$24–34 for nothing.**
 >
 > **Not ESP32-S3.** ⚠️ **The throughput table this argument used is SUPERSEDED** —
 > see [`docs/FLAG-512b-throughput-conflict.md`](docs/FLAG-512b-throughput-conflict.md).
@@ -124,8 +116,8 @@ using radios we already own**:
 > the E80 is worth $56.40. That $0 path is the **fallback if the order slips**, and
 > it is written up in the sourcing study.
 >
-> **Two long-lead items: #1 and #4.** **Order #1 first** — it is the one that can
-> slip. Everything else is domestic, cheap, and can wait.
+> **Two long-lead items: the E80 boards and the mast.** **Order the E80 first** —
+> it is the one that can slip. Everything else is domestic, cheap, and can wait.
 >
 > **Deliberately not on the list:** the anemometer (operator instruction), any PCB
 > fabrication, helium, envelopes, and a Helikite.
