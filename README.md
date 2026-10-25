@@ -46,6 +46,35 @@ reasoning: [`docs/PURCHASE-PLAN.md`](docs/PURCHASE-PLAN.md).
 | **6** | **Guy wire ring** for the pole (3 × 5/16″ holes) | 1 | **$2.95** | **Hitched4fun**<br>https://www.hitched4fun.com/product/1-inch-guy-wire-ring-for-31-ft-jackite-fiberglass-telescoping-pole/ | ✅ US |
 | **7** | **Antenna Mast Guying Kit** (cord + tensioners + stakes) | 1 | **$45.95** | Hitched4fun<br>https://www.hitched4fun.com/product/antenna-mast-guying-kit-for-jackite-31-ft-ham-ready/ | ✅ US |
 
+**Basket total ≈ $202.** Full channel-by-channel cost study, including what is
+cheaper but *too slow*, what is faster but *5× the price*, and a **$0 fallback
+using radios we already own**:
+[`docs/SOURCING-CHEAPEST-ONTIME.md`](docs/SOURCING-CHEAPEST-ONTIME.md).
+
+> ### Cheapest-that-arrives, in one paragraph
+>
+> **RobotShop's $18.80 is both the cheapest and the only E80 channel that makes
+> 5 Nov.** EBYTE direct is $18.56 — 24 cents less — and takes 14–37 working days,
+> arriving 12 Nov – 17 Dec. The China channels (AliExpress ~$13–14, Alibaba $13.83)
+> are genuinely cheaper per board and genuinely useless here. Seeed's LR2021 kit is
+> US-stock at $99 — 5.3× the price, and it is **not an STM32F103**, so it does not
+> answer the one question we are buying boards to answer.
+>
+> **Two savings worth taking:** the **28 ft** mast ($62.84) instead of the 31 ft
+> ($112.95) saves **$50**; and the guying kit's **sale** price ($45.95, list
+> $68.52) saves **$23**. Together **$73 for the same experiment.**
+>
+> **And one worth checking:** the master inventory lists **20× ESP32-C3 Mini V1**
+> and **2× RP2040-Zero already owned** (recorded as in Germany). If they are
+> reachable in time, **delete lines 2–3 — ~$34 for nothing.**
+>
+> **The bigger finding, stated plainly:** we already own **4× NiceRF LR2021
+> modules** and two RP2040+LR2021 rigs, so the bent pipe could be proven **for $0**
+> on the same radio and band. It would not answer **V8** (*can the 72 MHz STM32
+> relay at 2 Mbaud with FLRC-1300 active?*) — which is precisely why the E80 is
+> worth $56.40. That $0 path is the **fallback if the order slips**, and it is
+> written up in the sourcing study.
+>
 > **Two long-lead items: #1 and #5.** **Order #1 first** — it is the one that can
 > slip. Everything else is domestic, cheap, and can wait.
 >
