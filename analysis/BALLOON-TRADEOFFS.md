@@ -216,9 +216,30 @@ Stated plainly, because these are the ways it could be wrong:
 
 ---
 
-## 7. Verdict from the visual consultant
+## 7. Consultant rounds — what it caught
 
-See §7 of the commit for the round-by-round record. The consultant was asked to
-check **both layout and arithmetic** — per the `visual-consultant` skill, a consult
-verdict grades the picture but does not measure it, so its geometric claims are
-treated as hypotheses to check against the model output above.
+The consultant was asked to check **layout *and* arithmetic**. It did both, and
+the arithmetic check found a genuine bug.
+
+| Round | Verdict | Findings | Action |
+|---|---|---|---|
+| **1** | CHANGES_REQUESTED | **Drag computed from π·D² (surface area) instead of π·D²/4 (frontal area) — 4× too much drag.** Also: panel-4 shading ended at 60 in when the Part 101 boundary is 72 in; volume-only regulatory claim was incomplete | Bug fixed, all curves recomputed, §3 retraction added |
+| **2** | CHANGES_REQUESTED (presentation only) | Panel-3 legend collided with the canopy annotation; panel-1 lift curve ran off the top of the axes; panel-2 legend lost its `$` to mathtext escaping; panel-4 did not state its payload budget | All four fixed |
+| **3** | clean on the local crop check | — | — |
+
+**The round-1 catch is why this matters.** A layout-only review would have passed
+the figure: every label was legible, every axis labelled, nothing clipped. The
+numbers were wrong by a factor of four, and the wrong numbers changed the
+document's conclusion. Caught by asking "check the arithmetic, not just the
+picture" — and then verified by hand against the closed form before accepting it.
+
+**One consultant claim was checked and rejected:** round 1 also argued that a
+60 in sphere at 8 kn should sit at ~135 ft, not 43 ft, on the grounds that free
+lift (1,787 g) vastly exceeds drag (868 g). That reasoning ignores the stated
+payload — the curves are loaded to 50 % of net lift, which leaves ~893 g of free
+lift, and 40° / 115 ft follows. Its *own* alternative calculation used a
+1,527 g payload, which is not the plotted assumption. **So: right about the bug,
+wrong about the correction.** Recorded here rather than smoothing it over.
+
+Remaining known gaps are in §6 — payload mass unmeasured, Cd idealised, no
+thermal cycling, envelope mass ignored.
