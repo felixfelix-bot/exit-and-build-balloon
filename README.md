@@ -39,26 +39,33 @@ reasoning: [`docs/PURCHASE-PLAN.md`](docs/PURCHASE-PLAN.md).
 | # | Item | Qty | Price | Vendor | Ships to Austin |
 |---|---|---|---|---|---|
 | **1** | **`E80-900MBL-02`** eval board (STM32F103C8T6 + LR2021) | **3** | **$18.80 ea** | **RobotShop / Botstore**<br>https://www.robotshop.com/products/botstore-e80-900mbl-02-dual-band-lora-module-development-board | ✅ **US warehouse, in stock**, order handling stated 24 h |
-| **2** | **ESP32-C3 dev board** — second SWD flash probe | **2** | ~$10 ea | **Adafruit** https://www.adafruit.com/category/968<br>**SparkFun** https://www.sparkfun.com/categories/999 | ✅ domestic, 2–4 days |
-| **3** | **Silicone wire, 16 AWG** — SWD harness (SWCLK / SWDIO / GND) | 1 roll | ~$8 | Adafruit / SparkFun / **Amazon US** | ✅ domestic |
-| **4** | **Jumper wires + 0.1″ headers** (J2 tap + SWD header) | 1 set | ~$6 | Adafruit / SparkFun | ✅ domestic |
-| **5** | **Fibreglass telescoping mast** — Jackite 28 ft | 1 | **$62.84** | **Hamsource** (Shelton CT)<br>https://hamsource.com/product/28-jackite-pole-black/ | ✅ US domestic, **in stock**. The 31 ft is **out of stock** in all three colours |
-| **6** | **Guy wire ring** for the pole (3 × 5/16″ holes) | 1 | **$2.95** | **Hitched4fun**<br>https://www.hitched4fun.com/product/1-inch-guy-wire-ring-for-31-ft-jackite-fiberglass-telescoping-pole/ | ✅ US |
-| **7** | **Antenna Mast Guying Kit** (cord + tensioners + stakes) | 1 | **$45.95** | Hitched4fun<br>https://www.hitched4fun.com/product/antenna-mast-guying-kit-for-jackite-31-ft-ham-ready/ | ✅ US |
+| **2** | **ESP32-C3 dev board** — second SWD flash probe | **2** | **$9.99 for 2** on Amazon (AITRIP); Adafruit ~$10 ea | **Amazon US** (cheapest) · **Adafruit** https://www.adafruit.com/category/968 · **SparkFun** https://www.sparkfun.com/categories/999 | ✅ domestic, 2–4 days |
+| **3** | **Silicone wire + Dupont jumpers/headers** — SWD harness (SWCLK / SWDIO / GND) | 1 set | ~$8–10 on Amazon; ~$14 at Adafruit | Amazon US, or Adafruit / SparkFun | ✅ domestic |
+| **4** | **Fibreglass telescoping mast** — Jackite 28 ft | 1 | **$62.84** | **Hamsource** (Shelton CT)<br>https://hamsource.com/product/28-jackite-pole-black/ | ✅ US domestic, **in stock**. The 31 ft is **out of stock** in all three colours |
+| **5** | **Guy wire ring** for the pole (3 × 5/16″ holes) | 1 | **$2.95** | **Hitched4fun**<br>https://www.hitched4fun.com/product/1-inch-guy-wire-ring-for-31-ft-jackite-fiberglass-telescoping-pole/ | ✅ US |
+| **6** | **Antenna Mast Guying Kit** (cord + tensioners + stakes) | 1 | **$45.95** | Hitched4fun<br>https://www.hitched4fun.com/product/antenna-mast-guying-kit-for-jackite-31-ft-ham-ready/ | ✅ US |
 
-**Basket total ≈ $202.** Full channel-by-channel cost study, including what is
+**Basket ≈ $188–202.** Full channel-by-channel cost study, including what is
 cheaper but *too slow*, what is faster but *5× the price*, and a **$0 fallback
 using radios we already own**:
 [`docs/SOURCING-CHEAPEST-ONTIME.md`](docs/SOURCING-CHEAPEST-ONTIME.md).
+**Why not ESP32-S3, and is Amazon cheaper:** [`docs/S3-AND-AMAZON-PRICING.md`](docs/S3-AND-AMAZON-PRICING.md).
 
 > ### Cheapest-that-arrives, in one paragraph
 >
 > **RobotShop's $18.80 is both the cheapest and the only E80 channel that makes
 > 5 Nov.** EBYTE direct is $18.56 — 24 cents less — and takes 14–37 working days,
 > arriving 12 Nov – 17 Dec. The China channels (AliExpress ~$13–14, Alibaba $13.83)
-> are genuinely cheaper per board and genuinely useless here. Seeed's LR2021 kit is
-> US-stock at $99 — 5.3× the price, and it is **not an STM32F103**, so it does not
-> answer the one question we are buying boards to answer.
+> are genuinely cheaper per board and genuinely useless here — that premium buys
+> the *calendar*, not the board. Seeed's LR2021 kit is US-stock at $99 — 5.3× the
+> price, and it is **not an STM32F103**, so it does not answer the one question we
+> are buying boards to answer.
+>
+> **Amazon is cheaper on the commodities:** the ESP32-C3 boards are **$9.99 for
+> two** on Amazon versus ~$20 at Adafruit, and the SWD wire/jumpers are ~$8–10
+> versus ~$14. Taking Amazon on lines 2–3 saves **~$14**. Amazon prices are from
+> search snippets, **not** pages I could verify (every fetch hit a bot-wall) —
+> check before ordering.
 >
 > **Two savings worth taking:** the **28 ft** mast ($62.84) instead of the 31 ft
 > ($112.95) saves **$50**; and the guying kit's **sale** price ($45.95, list
@@ -66,16 +73,21 @@ using radios we already own**:
 >
 > **And one worth checking:** the master inventory lists **20× ESP32-C3 Mini V1**
 > and **2× RP2040-Zero already owned** (recorded as in Germany). If they are
-> reachable in time, **delete lines 2–3 — ~$34 for nothing.**
+> reachable in time, **delete lines 2–3 — ~$24–34 for nothing.**
+>
+> **Not ESP32-S3.** Measured (ADR-026, 1000/1000 packets): **RP2040 1377 kbps,
+> ESP32-C3 838 kbps** at FLRC 2600. The S3 answers a question we did not ask — V8
+> is about the **STM32F103**, and an ESP32 in that path replaces the subject of the
+> test. If a faster radio path is wanted, the measured answer is **RP2040, which we
+> already own.**
 >
 > **The bigger finding, stated plainly:** we already own **4× NiceRF LR2021
 > modules** and two RP2040+LR2021 rigs, so the bent pipe could be proven **for $0**
-> on the same radio and band. It would not answer **V8** (*can the 72 MHz STM32
-> relay at 2 Mbaud with FLRC-1300 active?*) — which is precisely why the E80 is
-> worth $56.40. That $0 path is the **fallback if the order slips**, and it is
-> written up in the sourcing study.
+> on the same radio and band. It would not answer **V8** — which is precisely why
+> the E80 is worth $56.40. That $0 path is the **fallback if the order slips**, and
+> it is written up in the sourcing study.
 >
-> **Two long-lead items: #1 and #5.** **Order #1 first** — it is the one that can
+> **Two long-lead items: #1 and #4.** **Order #1 first** — it is the one that can
 > slip. Everything else is domestic, cheap, and can wait.
 >
 > **Deliberately not on the list:** the anemometer (operator instruction), any PCB
