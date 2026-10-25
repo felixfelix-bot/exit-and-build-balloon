@@ -392,6 +392,53 @@ sustained wind at KERV never reached 20 kn (max 18 kn); 14% of days had a daily 
 
 ---
 
+## 9.1 Purchase order — what to actually buy, in what order
+
+§9 below is the *open questions*. This is the *buy list*, ordered by lead time, so
+the longest pole starts today and nothing is bought twice.
+
+**Do not order anything in this table until the open items below are closed** —
+except where the row says otherwise. Nothing here has been ordered.
+
+| # | Item | Qty | Buyer | Order when | Lead time | Blocks |
+|---|---|---|---|---|---|---|
+| **O1** | **3rd `E80-900MBL-02` eval board** | **1** | operator | **TODAY — this is the longest pole** | ~10–14 d express · 14–37 d surface **misses** | The relay role. Without it the rig flies 2 boards and cannot measure while relaying (B12) |
+| O2 | `E80-900M2212S` bare module (sniffer hedge) | 1–2 | operator | with O1 (same shipment) | same as O1 | Independent observer during a relay run — the cheap alternative to O1 |
+| O3 | Ship the German E80 pair → Texas | 2 | operator | **this week** | transatlantic + customs ~1–2 weeks | Every hardware gate (A1) |
+| O4 | Mast (Jackite, 27–31 ft fibreglass) | 1–2 | operator | after M1–M5 confirmed | US domestic, days | The whole rig if wind >6 kn |
+| O5 | Guy line, anchors, swivel/shackle hardware | 1 set | operator | with O4 | days | — |
+| O6 | Anemometer (handheld, kn) | 1 | operator | with O4 | days | **the go/no-go rule** — required |
+| O7 | Dyneema 1.5 mm 200 ft + 1.0 mm 300 ft | 1 + 1 | operator | with O4 | days | Tether |
+| O8 | Twisted-pair payload cable AWG28, 150 ft | 1 | operator | after regulator chosen (§6.1 **UNVERIFIED**) | days | Payload power |
+| O9 | On-payload regulator (accepts 12 V feed → 3.3 V) | 1 | operator | after datasheet read | days | Payload power. **The one number that decides the 12 V feed** |
+| O10 | Ground 12 V supply with current logging | 1 | — | already on site | — | — |
+| O11 | **Calibrated 0–500 g scale** | 1 | operator | before first lift-weigh | days | The 4-day top-up ritual; the payload mass is unmeasured without it |
+| O12 | High-visibility line marking + streamers | — | operator | with O4 | days | Safety (B10: invisible Dyneema) |
+| O13 | Balloon-grade He ≥99.99%, ~30 ft³ industrial cylinder | 1 | operator | **only if the balloon flies** — mast path needs none | will-call, days | Balloon path only |
+| O14 | Latex spheres 36–48 in + HI-FLOAT | 4–6 + 1 kit | operator | only if He ordered | days | Balloon path only |
+
+**Order-of-operations, stated plainly:**
+
+1. **O1/O3 today, together.** They are one decision — a shipping path for three
+   boards into Texas — and one deadline. Splitting them means two customs
+   crossings and two arrival dates against one event date.
+2. **O4–O7 next**, because US domestic lead time is short and the mast is the
+   primary asset (D8b).
+3. **O8/O9 as one step** — never order the cable before the regulator's input
+   range is read (§6.1).
+4. **O13/O14 last, and only on a GO for the balloon path.** The mast path needs
+   no helium, no envelope and no wind rule.
+
+> ⚠️ **What is deliberately NOT on this list:** ESP32-C3 boards (D14 — the E80
+> supplies MCU + USB bridge + radio), any PCB fabrication (D10), and any second
+> LR2021 module for the relay (the relay is an E80 board, not a module + MCU).
+>
+> ⚠️ **Water — not on the list, and it should be.** The 4-day hang-time decision
+> (§5) means the rig is exposed to a Texas November night. Condensation on the
+> LR2021/TCXO is not in this file as a purchased item because the mitigation is
+> enclosure design, not a part — but if the payload flies unprotected, that is a
+> gap in the BOM, not a detail. Raise it before the mast goes up.
+
 ## 9. Open items before ordering
 
 | # | Item | Owner |
@@ -402,3 +449,5 @@ sustained wind at KERV never reached 20 kn (max 18 kn); 14% of days had a daily 
 | 4 | **§ 101.13(a)(4) five-mile airport question** — 20TS Bains Private is 3.4 mi away. Only binds if the balloon exceeds 6 ft / 115 ft³. | organiser / FAA |
 | 5 | Cylinder size / outlet / regulator / deposit | at quote |
 | 6 | Dyneema breaking strengths — verify against the datasheet bought | at purchase |
+| 7 | **3rd E80 board** — order (O1) or fly 2 and lose concurrent measurement? Coupled to the Germany→Texas path (O3) | **operator — decide today** |
+| 8 | **Board inventory truth** — this file assumes **2 × `E80-900MBL-02`**. If a third exists, B12 and O1 are void | operator |
