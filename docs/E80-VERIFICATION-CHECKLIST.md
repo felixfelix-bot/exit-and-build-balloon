@@ -215,7 +215,7 @@ baseline to compare against — but 72 MHz is the lowest clock in the project.
 firmware is worth writing.
 
 > **Why this gate is cheap now:** the throughput test runs on the *same* board,
-> same SPI bus, same radio that will relay at the event — one image in `bench` vs
+> same SPI bus, same radio that will relay at the event — one image, `bench` vs
 > `relay` mode. A number measured here is a number that applies in the air; there
 > is no second rig to disagree with it. It also means a **failed** V8 is a real
 > verdict on the flying hardware, not a verdict on a bench stand-in that could

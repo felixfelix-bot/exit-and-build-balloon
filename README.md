@@ -209,8 +209,9 @@ that never actually passed the traffic, because the bench never ran that code.
 
 **With the change, the board that measures the link is the board that relays it.**
 
-- The measurement firmware and the relay firmware are **one image in two modes**,
-  on the same silicon, same SPI bus, same radio, same clock.
+- The measurement firmware and the relay firmware are **one image in three modes**
+  (`bench` / `ground` / `relay`), on the same silicon, same SPI bus, same radio,
+  same clock.
 - A bridge bug cannot hide behind a separate box — it appears in the very
   PER/RSSI/SNR numbers being logged, because that path *is* the path.
 - The throughput answer (V8) and the range answer come from the same rig, so a
@@ -226,7 +227,7 @@ honest.
 
 **Cost of the change:** the relay and the measurement now contend for the same
 board, so you cannot measure the link while relaying on one board — you need a
-third E80 for that (B10). And a failed flash now fails both jobs at once.
+third E80 for that (B12). And a failed flash now fails both jobs at once.
 
 ---
 
