@@ -11,22 +11,24 @@ part of this project than the one that is blocked.
 
 ### First, the numbers we actually have
 
-`balloon-fresh` ADR-026 records the **measured** radio-layer throughput at FLRC
-2600 kbps, 1000/1000 packets verified:
+`balloon-fresh` ADR-026 recorded radio-layer throughput at FLRC 2600 kbps
+(2026-07-29). ⚠️ **Superseded** — the newer **2.4 GHz sustained sweep**
+(`docs/sustained-throughput-results-2026-07-23.md` in `balloon-fresh`) measures
+**1484.9 kbps sustained at BR2600, 57.1 % of air rate, 0.00 % PER over 21,923
+packets**, with the limiter identified as the **host SPI/TX path (~1487 kbps flat
+across every bitrate)**. Full derivation:
+[`THROUGHPUT-SETTLED-by-measurement.md`](THROUGHPUT-SETTLED-by-measurement.md).
+
+The superseded ADR-026 figures, for the record:
 
 | MCU | Throughput | % of air rate |
 |---|---|---|
 | RP2040 (Pico SDK, batched SPI) | **1377 kbps** | 54% |
 | ESP32-C3 (ESP-IDF, raw SPI) | **838 kbps** | 33% |
 
-RP2040 is **64% faster** than the C3 at the radio layer. The reason is
-architectural, not clock speed:
-
-1. **Batched SPI** — the RP2040 builds a whole multi-byte transaction in one DMA
-   buffer (NSS low → wait BUSY → opcode+payload → NSS high). No per-byte gaps.
-2. **Nothing else running** — the RP2040 runs *only* the radio stack. No WiFi/BT
-   stack stealing cycles, no RTOS scheduling jitter.
-3. **Lower IRQ latency** — bare-metal IRQ beats preempted FreeRTOS dispatch.
+Those compared two MCUs at 255 B. **The current question is not which MCU is
+faster — it is that the TX SPI path caps everything at ~1487 kbps regardless of
+bitrate.**
 
 ### So why is S3 not the answer to the relay problem?
 
@@ -101,8 +103,10 @@ five minutes and it is the only way to be sure.
 
 ## Bottom line
 
-- **S3: no.** It does not answer V8, it is architecturally the *application* MCU,
-  and the measured evidence says the faster radio path is RP2040 — which we own.
+- **S3: no.** It does not answer V8 — V8 asks about the **STM32F103**, so an ESP32
+  in that path replaces the subject of the test. Separately, the throughput
+  question is now settled by measurement: the limiter is the **TX SPI path
+  (~1487 kbps flat)**, not the choice of ESP32 vs RP2040.
 - **Amazon: cheaper on the commodities, not available for the E80.** Switching
   lines 2–3 to Amazon saves ~$14. Keeping RobotShop for the E80 is not a price
   decision; it is the only decision that arrives.

@@ -1,7 +1,7 @@
 # Flag: "512 B gets us the full 2.6 Mbit" conflicts with the repo's own audit
 
 **Date:** 2026-10-25. **Raised by:** operator correction to `docs/S3-AND-AMAZON-PRICING.md`.
-**Status: OPEN — needs the operator's decision, not a silent edit.**
+**Status: CLOSED 2026-10-25 — see `THROUGHPUT-SETTLED-by-measurement.md`.**
 
 You said the 1377/838 kbps figures are outdated because bumping the packet from
 255 to 512 B yields the full 2.6 Mbit. I went to apply that. **The repo says

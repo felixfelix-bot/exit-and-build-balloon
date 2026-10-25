@@ -95,20 +95,20 @@ The E80 is the **one** line where cheapest ≠ arrives, and the gap is **$16.40*
 > **2× RP2040-Zero already owned** (recorded as in Germany). If reachable in time,
 > **delete lines 2–3 — ~$24–34 for nothing.**
 >
-> **Not ESP32-S3.** ⚠️ **The throughput table this argument used is SUPERSEDED** —
-> see [`docs/FLAG-512b-throughput-conflict.md`](docs/FLAG-512b-throughput-conflict.md).
-> The 1377/838 kbps figures are **not current**, and the claim that a 512 B payload
-> reaches full 2.6 Mbps is **contested inside the repo**: the 2026-10-06 audit
-> `FLRC-512B-THROUGHPUT-AUDIT` concludes 2.6 Mbps is the *air rate, not delivered
-> goodput*, that **511 B is the driver's documented maximum** (512 is not a legal
-> length), and that the 255→511 B lever is worth **+2.1 %**, not 2×. **Flagged, not
-> silently rewritten — the conflict needs resolving.**
+> **Not ESP32-S3.** The throughput numbers I first quoted here (ADR-026's
+> 1377/838 kbps) were **stale** — now replaced by the repo's **real 2.4 GHz
+> sustained sweep**: **1484.9 kbps at BR2600, 57.1 % of air rate, 0.00 % PER over
+> 21,923 packets**, and the limiter is the **host SPI/TX path (~1487 kbps flat
+> across every bitrate)**, not the coding rate or payload size. Full derivation:
+> [`docs/THROUGHPUT-SETTLED-by-measurement.md`](docs/THROUGHPUT-SETTLED-by-measurement.md).
 >
-> **The S3 conclusion does not depend on those numbers.** It rests on: an ESP32
-> **does not answer V8**, because V8 asks about the **STM32F103**. Correcting the
-> throughput figures changes the *performance context*, not the *subject of the
-> test*. If a faster radio path is wanted, the measured evidence points at
-> **RP2040** — and we own two.
+> **Why the S3 conclusion is unchanged:** it never rested on those numbers. It
+> rests on: an ESP32 **does not answer V8**, because V8 asks about the
+> **STM32F103**. Correcting the throughput figures changes the *performance
+> context*, not the *subject of the test*. If a faster radio path is wanted, the
+> lever the measurement points at is **fixing the TX SPI bottleneck** — which is
+> what the repo's throughput-fix plan and P4.1 already target — and we own two
+> RP2040s to do it on.
 >
 > **The bigger finding, stated plainly:** we already own **4× NiceRF LR2021
 > modules** and two RP2040+LR2021 rigs, so the bent pipe could be proven **for $0**
@@ -314,7 +314,8 @@ This repo sources and links only.
 | **`docs/PURCHASE-PLAN.md`** | **Buy list by lead time, US vs China sourcing, mast SKU survey** |
 | **`docs/SOURCING-CHEAPEST-ONTIME.md`** | **Every E80 channel priced and timed; cheapest on-time basket; the $0 fallback** |
 | **`docs/S3-AND-AMAZON-PRICING.md`** | **Why ESP32-S3 is not the answer; is Amazon cheaper** |
-| **`docs/FLAG-512b-throughput-conflict.md`** | **⚠️ OPEN — the "512 B gets full 2.6 Mbps" claim vs the repo's own audit** |
+| **`docs/THROUGHPUT-SETTLED-by-measurement.md`** | **✅ CLOSED — real 2.4 GHz sustained sweep: 1484.9 kbps at BR2600, 0.00 % PER, TX/SPI-limited** |
+| **`docs/BALLOON-PATH-deferred.md`** | **Deferred balloon path — helium, envelopes, Helikite, wind data. Not needed for the event.** |
 | `docs/PLAN-bent-pipe-2026-11.md` | Master plan — decisions, phases, worker tasks, blockers (**B12** = board count) |
 | `docs/E80-VERIFICATION-CHECKLIST.md` | Board bring-up — **run FIRST, it gates everything**. V1 = flash, V8 = throughput |
 | `docs/ASSET-STRATEGY.md` | Lifting-asset decision + the Germany→Texas inventory problem |
