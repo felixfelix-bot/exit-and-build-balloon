@@ -3,18 +3,13 @@
 **Status:** DRAFT, awaiting operator GO. **Nothing ordered.** Prices read live
 2026-10-25 unless marked otherwise; prices and stock move — re-read at checkout.
 
-> **Why prices appear as codes.** The fleet's pre-commit credential gate reads a
-> `$`-prefixed number next to a vendor path as a possible secret and blocks the
-> commit. So each price is written as plain **decimal cents in hex**, which
-> renders without a `$`. Decode any code with:
->
-> ```sh
-> python3 -c "print(int('188c',16)/100)"   # -> 6284 cents -> 62.84
-> ```
->
-> **This is obfuscation against a scanner, not confidentiality** — one command
-> reveals every number, on purpose. Regenerate at order time; these were live on
-> 2026-10-25 and will drift.
+> **Correction (2026-10-25):** earlier revisions of this file wrote every price as
+> *decimal cents in hex*, on the assumption that the pre-commit credential gate
+> would block a plain `$` price next to a vendor path. **That assumption was
+> never tested, and it is false** — a commit carrying `$18.56` from robotshop.com
+> passes `cred-gate` clean. The prices below are now written plainly. Nothing was
+> ever confidential; the encoding only made the file harder to read while
+> ordering.
 
 ---
 
@@ -35,11 +30,11 @@ for the event is already too late. They must be *shipped* from Germany.
 **Three things must be bought or moved. Everything else on this page is
 nice-to-have.**
 
-| # | Item | Qty | Cost (cents in hex) | Why it is on the minimum |
+| # | Item | Qty | Cost | Why it is on the minimum |
 |---|---|---|---|---|
 | **M1** | **Ship 2 × `E80-900MBL-02` Germany → Texas** | 2 boards | **shipping + customs, NOT YET QUOTED** | Without a radio in Texas there is no experiment. This is not a purchase, it is the critical path. |
-| **M2** | **Fibreglass telescoping mast, Jackite** | 1 | `188c` (62.84) | The relay has to be *above* something. A pole on the ground is a structure — no airspace permission, no wind rule, no notification. |
-| **M3** | **Anemometer, hand-held, reads knots** | 1 | `08fc`–`1388` (~23–50, indicative) | Not optional despite the price. The go/no-go wind rule is the whole safety story for a filament in the air, and without a reading the rule cannot be applied. |
+| **M2** | **Fibreglass telescoping mast, Jackite** | 1 | $62.84 | The relay has to be *above* something. A pole on the ground is a structure — no airspace permission, no wind rule, no notification. |
+| **M3** | **Anemometer, hand-held, reads knots** | 1 | $23.00–$50.00 | Not optional despite the price. The go/no-go wind rule is the whole safety story for a filament in the air, and without a reading the rule cannot be applied. |
 
 **Minimum total ≈ one dinner out, plus the transatlantic shipment.** The binding
 constraint is not money — it is the calendar.
@@ -53,12 +48,12 @@ constraint is not money — it is the calendar.
 
 ## 2. Strongly recommended (buys back the self-verification)
 
-| # | Item | Qty | Cost (cents in hex) | Buys |
+| # | Item | Qty | Cost | Buys |
 |---|---|---|---|---|
-| R1 | **3rd `E80-900MBL-02` eval board** | 1 | `0740` (18.56) + express | Fills the relay role properly; a spare if a board dies. **Order TODAY or accept it may miss 5 Nov** (14–37 d China). |
-| R2 | `E80-900M2212S` bare module — listen-only sniffer on an owned RP2040 | 1 | `03b4` (9.48) | Independent observer during a relay run without a 3rd eval board. Rides R1's shipment. **Cannot relay.** |
-| R3 | Guy wire ring for the Jackite pole (3 × 5/16 in holes, ~20 ft up) | 1 | `0127` (2.95) | The mast needs ≥3 guy points or it whips in wind. |
-| R4 | Guying kit (cord + line tensioners + stakes) | 1 | `11f3` (45.95) | The ring alone is not anchorage. |
+| R1 | **3rd `E80-900MBL-02` eval board** | 1 | $18.56 + express | Fills the relay role properly; a spare if a board dies. **Order TODAY or accept it may miss 5 Nov** (14–37 d China). |
+| R2 | `E80-900M2212S` bare module — listen-only sniffer on an owned RP2040 | 1 | $9.48 | Independent observer during a relay run without a 3rd eval board. Rides R1's shipment. **Cannot relay.** |
+| R3 | Guy wire ring for the Jackite pole (3 × 5/16 in holes, ~20 ft up) | 1 | $2.95 | The mast needs ≥3 guy points or it whips in wind. |
+| R4 | Guying kit (cord + line tensioners + stakes) | 1 | $45.95 | The ring alone is not anchorage. |
 
 ---
 
@@ -70,12 +65,12 @@ warns *"do not order from the $1/foot review quote."* That is now fixed:
 | Vendor | Item | Price | Stock (2026-10-25) | Note |
 |---|---|---|---|---|
 | **Hamsource** (hamsource.com, Shelton CT, 203-556-8700) | **28 ft Jackite pole** — black | **62.84** | **In stock** | **First US mast SKU with a live price. This is the one to order.** |
-| Hamsource | 28 ft Jackite — orange | `188c` | In stock | Same pole, visibility colour |
-| Hamsource | 31 ft Jackite — black / green / orange | `17b0` (60.64)… | **Out of stock** (all three) | The 31 ft is the nicer mast and is unavailable |
-| Hitched4fun (hitched4fun.com) | 31 ft Jackite "Thick Tip" | `2c1f` (112.95) | Listed | Higher price, thicker tip, non-conductive |
-| Hitched4fun | Guy wire ring, 1 in | `0127` (2.95) | Listed | Fits "the 31/28 ft Jackite" |
-| Hitched4fun | Antenna Mast Guying Kit for 31 ft | on sale `11f3` (45.95), was `1ac4` (68.52) | Listed | Cord + tensioners + stakes |
-| Whistlergroup | Jackite kite poles — 16 / 28 / 31 ft | 16 ft `1643` (56.99) | 16 ft **sold out** | Kite-pole branding, same fibre |
+| Hamsource | 28 ft Jackite — orange | $62.84| In stock | Same pole, visibility colour |
+| Hamsource | 31 ft Jackite — black / green / orange | $60.64… | **Out of stock** (all three) | The 31 ft is the nicer mast and is unavailable |
+| Hitched4fun (hitched4fun.com) | 31 ft Jackite "Thick Tip" | $112.95 | Listed | Higher price, thicker tip, non-conductive |
+| Hitched4fun | Guy wire ring, 1 in | $2.95 | Listed | Fits "the 31/28 ft Jackite" |
+| Hitched4fun | Antenna Mast Guying Kit for 31 ft | on sale $45.95, was $68.52 | Listed | Cord + tensioners + stakes |
+| Whistlergroup | Jackite kite poles — 16 / 28 / 31 ft | 16 ft $56.99 | 16 ft **sold out** | Kite-pole branding, same fibre |
 
 **Verified facts about the 31 ft pole** (from the vendor pages, useful for M2.2/23):
 
@@ -94,22 +89,24 @@ hand on 1 Nov beats a better mast that is out of stock on 25 Oct.
 
 ---
 
-## 4. What the price literally is, in one table
+## 4. Price summary in one table
 
-Decoded for reading convenience — the coded column is what stays in git.
+| Item | Price | Source |
+|---|---|---|
+| E80-900MBL-02 eval board | $18.56 | EBYTE direct, read 2026-10-23 |
+| E80-900MBL-02 eval board | $18.80 | RobotShop/Botstore, in stock, **read 2026-10-25** |
+| E80-900M2212S bare module | $9.48 | EBYTE |
+| 28 ft Jackite pole, Hamsource | $62.84 | read 2026-10-25 |
+| 31 ft Jackite, Hamsource | $60.64 | **out of stock** |
+| 31 ft Jackite Thick Tip, hitched4fun | $112.95 | read 2026-10-25 |
+| Guy wire ring | $2.95 | read 2026-10-25 |
+| Guying kit | $45.95 sale / $68.52 list | read 2026-10-25 |
+| Anemometer (indicative) | ~$23–50 | Amazon US, SKU not pinned |
+| Party helium 8.9 / 14.9 ft³ | $56.99 / $75.99 | balloon path only |
 
-| Item | Cents (hex) | USD | Source |
-|---|---|---|---|
-| E80-900MBL-02 eval board | `0740` | 18.56 | EBYTE, read 2026-10-23 |
-| E80-900M2212S bare module | `03b4` | 9.48 | EBYTE |
-| 28 ft Jackite pole, Hamsource | `188c` | 62.84 | read 2026-10-25 |
-| 31 ft Jackite, Hamsource (OOS) | `17b0` | 60.64 | read 2026-10-25 |
-| 31 ft Jackite Thick Tip, hitched4fun | `2c1f` | 112.95 | read 2026-10-25 |
-| Guy wire ring | `0127` | 2.95 | read 2026-10-25 |
-| Guying kit (sale) | `11f3` | 45.95 | read 2026-10-25 |
-| Guying kit (list) | `1ac4` | 68.52 | 2026-10-25 |
-| Anemometer (indicative) | `08fc`–`1388` | ~23–50 | Amazon US, SKU not pinned |
-| Party helium 8.9 ft³ / 14.9 ft³ | `1643` / `1daf` | 56.99 / 75.99 | balloon path only |
+> **Note on E80 sourcing:** EBYTE direct is $18.56 but ships from China in 14–37
+> working days and **misses the event**. RobotShop/Botstore is $18.80 — 24 cents
+> more — and ships from US stock in days. **Buy the US one.** See §8.
 
 ---
 
@@ -178,7 +175,7 @@ exists, it is either the wrong chip or not the eval board.
 | Item | `E80-900MBL-02` Dual-Band LoRa Module Development Board |
 | Seller | **Botstore**, fulfilled via **RobotShop** |
 | SKU | `RM-BOTS-1GP` |
-| Price | **`0758` (18.80 USD)** — *cheaper than EBYTE direct at `0740` 18.56 + express* |
+| Price | **$18.80** — *cheaper than EBYTE direct at $18.5618.56 + express* |
 | Stock | **In stock** (US storefront; CA storefront showed 5 units) |
 | Vendor description | *"features an STMicroelectronics general-purpose MCU **STM32F103C8T6**"* — **the right board**, matched on SKU **and** on the MCU line |
 | RobotShop logistics | Facilities in **USA, Canada, Japan, Germany**; *"handle orders within 24 hours"*; *"ships within the USA"* (support-confirmed for US-warehouse lines) |
@@ -201,7 +198,7 @@ is the difference between "tight" and "fine."
 | Was | Now |
 |---|---|
 | **R1** — order 3rd E80 from EBYTE, 14–37 d, tight vs 5 Nov | **✅ Order the 3rd (or all three) from RobotShop/Botstore, in stock, US-fulfilled.** EBYTE is no longer needed for the event. |
-| **M1** — ship the German pair to Texas, transatlantic + customs, unpriced | **Now optional.** If RobotShop delivers, buying **3 boards in the US at `0758` each may be cheaper AND faster than shipping 2 across the Atlantic.** Get the shipping quote only to compare — do not default to it. |
+| **M1** — ship the German pair to Texas, transatlantic + customs, unpriced | **Now optional.** If RobotShop delivers, buying **3 boards in the US at $18.80each may be cheaper AND faster than shipping 2 across the Atlantic.** Get the shipping quote only to compare — do not default to it. |
 | M2 mast, M3 anemometer | **Unchanged** — both already US-domestic. |
 
 **This removes the single worst constraint in the plan.** The project was
@@ -213,7 +210,7 @@ in-stock source for the exact SKU deletes both.
 1. Confirm **ship-from = United States** and a **delivery date ≤ 3 Nov**.
 2. Confirm the **exact SKU `E80-900MBL-02`** and the **STM32F103C8T6** line in the
    description — `MBL-01` is LR1121 and `2213S` is LR1121; both are wrong.
-3. Order **3** (M1/M2/M3 roles) — at `0758` each, three boards cost less than one
+3. Order **3** (M1/M2/M3 roles) — at $18.80each, three boards cost less than one
    EBYTE express order would once shipping is added.
 4. If the delivery date slips, fall back to the German pair (M1) — that path
    still exists, it is just slower and had to be quoted anyway.
