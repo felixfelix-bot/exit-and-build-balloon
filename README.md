@@ -38,12 +38,40 @@ reasoning: [`docs/PURCHASE-PLAN.md`](docs/PURCHASE-PLAN.md).
 
 | # | Item | Qty | Price | Vendor | Ships to Austin |
 |---|---|---|---|---|---|
-| **1** | **`E80-900MBL-02`** eval board (STM32F103C8T6 + LR2021) | **3** | **$18.80 ea** | **RobotShop / Botstore**<br>https://www.robotshop.com/products/botstore-e80-900mbl-02-dual-band-lora-module-development-board | ✅ **US warehouse, in stock**, order handling stated 24 h |
+| **1** | **`E80-900MBL-02`** eval board (STM32F103C8T6 + LR2021) | **3** | **$18.80 ea** | **RobotShop / Botstore** (US stock, on time)<br>https://www.robotshop.com/products/botstore-e80-900mbl-02-dual-band-lora-module-development-board<br>🇨🇳 **AliExpress alternative (~$13–14, TOO SLOW — see note):**<br>https://www.aliexpress.com/item/1005012863308600.html | ✅ RobotShop. ⚠️ AliExpress ships from China 7–15 d + customs → **likely misses 5 Nov** |
 | **2** | **ESP32-C3 dev board** — second SWD flash probe | **2** | **$9.99 for 2** on Amazon (AITRIP); Adafruit ~$10 ea | **Amazon US** (cheapest) · **Adafruit** https://www.adafruit.com/category/968 · **SparkFun** https://www.sparkfun.com/categories/999 | ✅ domestic, 2–4 days |
 | **3** | **Silicone wire + Dupont jumpers/headers** — SWD harness (SWCLK / SWDIO / GND) | 1 set | ~$8–10 on Amazon; ~$14 at Adafruit | Amazon US, or Adafruit / SparkFun | ✅ domestic |
 | **4** | **Fibreglass telescoping mast** — Jackite 28 ft | 1 | **$62.84** | **Hamsource** (Shelton CT)<br>https://hamsource.com/product/28-jackite-pole-black/ | ✅ US domestic, **in stock**. The 31 ft is **out of stock** in all three colours |
 | **5** | **Guy wire ring** for the pole (3 × 5/16″ holes) | 1 | **$2.95** | **Hitched4fun**<br>https://www.hitched4fun.com/product/1-inch-guy-wire-ring-for-31-ft-jackite-fiberglass-telescoping-pole/ | ✅ US |
 | **6** | **Antenna Mast Guying Kit** (cord + tensioners + stakes) | 1 | **$45.95** | Hitched4fun<br>https://www.hitched4fun.com/product/antenna-mast-guying-kit-for-jackite-31-ft-ham-ready/ | ✅ US |
+
+> ### ⚠️ On the AliExpress link — read before using it
+>
+> You asked for the AliExpress version wherever possible, so it is linked above. **I
+> am linking it while recommending against using it for the event**, and the reason
+> is not price:
+>
+> - **The listing is real and verified** — `item/1005012863308600.html`, HTTP 200,
+>   and it genuinely carries all four E80 variants (2212S / 2213S / MBL-01 /
+>   **MBL-02**) on one page. So you can absolutely order the right part there.
+> - **It is ~25–30 % cheaper** — China-side pricing runs **~$13–14** versus
+>   RobotShop's $18.80, i.e. about **$15 saved** across three boards.
+> - **It ships from China: 7–15 working days plus customs.** Against a 5 Nov
+>   event that is 10 days away, **that is the whole margin**. And the vendor's own
+>   policy pages note a **10–20 % chance** of an additional 7–15 day customs delay
+>   on US-bound electronics — the exact product category.
+> - **The premium buys the calendar, not the board.** $15 is the cheapest thing on
+>   this list per unit of delivery risk removed.
+> - **RobotShop was verified in US stock at $18.80 with 24 h order handling.**
+>   AliExpress's per-item ship-from and date were **not** readable (the page
+>   returns a bot-wall stub with no price or shipping fields).
+>
+> **When the AliExpress link IS the right call:** as a **spare set**, ordered now,
+> for the *next* event — or if the RobotShop order slips and you need a second
+> source. Ordered today with the mast, it arrives after the event.
+>
+> **Do not order the `-01` variant.** `E80-900MBL-01` is **LR1121**, not LR2021 —
+> different chip, and its driver is not what the bench firmware links.
 
 **Basket ≈ $188–202.** Full channel-by-channel cost study, including what is
 cheaper but *too slow*, what is faster but *5× the price*, and a **$0 fallback
@@ -75,11 +103,20 @@ using radios we already own**:
 > and **2× RP2040-Zero already owned** (recorded as in Germany). If they are
 > reachable in time, **delete lines 2–3 — ~$24–34 for nothing.**
 >
-> **Not ESP32-S3.** Measured (ADR-026, 1000/1000 packets): **RP2040 1377 kbps,
-> ESP32-C3 838 kbps** at FLRC 2600. The S3 answers a question we did not ask — V8
-> is about the **STM32F103**, and an ESP32 in that path replaces the subject of the
-> test. If a faster radio path is wanted, the measured answer is **RP2040, which we
-> already own.**
+> **Not ESP32-S3.** ⚠️ **The throughput table this argument used is SUPERSEDED** —
+> see [`docs/FLAG-512b-throughput-conflict.md`](docs/FLAG-512b-throughput-conflict.md).
+> The 1377/838 kbps figures are **not current**, and the claim that a 512 B payload
+> reaches full 2.6 Mbps is **contested inside the repo**: the 2026-10-06 audit
+> `FLRC-512B-THROUGHPUT-AUDIT` concludes 2.6 Mbps is the *air rate, not delivered
+> goodput*, that **511 B is the driver's documented maximum** (512 is not a legal
+> length), and that the 255→511 B lever is worth **+2.1 %**, not 2×. **Flagged, not
+> silently rewritten — the conflict needs resolving.**
+>
+> **The S3 conclusion does not depend on those numbers.** It rests on: an ESP32
+> **does not answer V8**, because V8 asks about the **STM32F103**. Correcting the
+> throughput figures changes the *performance context*, not the *subject of the
+> test*. If a faster radio path is wanted, the measured evidence points at
+> **RP2040** — and we own two.
 >
 > **The bigger finding, stated plainly:** we already own **4× NiceRF LR2021
 > modules** and two RP2040+LR2021 rigs, so the bent pipe could be proven **for $0**
@@ -283,6 +320,9 @@ This repo sources and links only.
 |---|---|
 | **`docs/RECOMMENDATION-postpone-and-minimum.md`** | **The postponement recommendation, argued in full** |
 | **`docs/PURCHASE-PLAN.md`** | **Buy list by lead time, US vs China sourcing, mast SKU survey** |
+| **`docs/SOURCING-CHEAPEST-ONTIME.md`** | **Every E80 channel priced and timed; cheapest on-time basket; the $0 fallback** |
+| **`docs/S3-AND-AMAZON-PRICING.md`** | **Why ESP32-S3 is not the answer; is Amazon cheaper** |
+| **`docs/FLAG-512b-throughput-conflict.md`** | **⚠️ OPEN — the "512 B gets full 2.6 Mbps" claim vs the repo's own audit** |
 | `docs/PLAN-bent-pipe-2026-11.md` | Master plan — decisions, phases, worker tasks, blockers (**B12** = board count) |
 | `docs/E80-VERIFICATION-CHECKLIST.md` | Board bring-up — **run FIRST, it gates everything**. V1 = flash, V8 = throughput |
 | `docs/ASSET-STRATEGY.md` | Lifting-asset decision + the Germany→Texas inventory problem |
